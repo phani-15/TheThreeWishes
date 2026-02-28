@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 export default function Level3WinPage() {
   const navigate = useNavigate();
@@ -12,6 +13,25 @@ export default function Level3WinPage() {
 
     return () => clearTimeout(timer);
   }, [navigate]);
+
+  useEffect(() => {
+    // Call API to submit Level 3 score
+    const submitLevel3 = async () => {
+      const email = localStorage.getItem("userEmail");
+      if (email) {
+        try {
+          await api.post("/level3/submit", {
+            email,
+            score: 1, // Final round score
+            submissionTimes: [new Date().toISOString()]
+          });
+        } catch (err) {
+          console.error("Failed to submit Level 3 score:", err);
+        }
+      }
+    };
+    submitLevel3();
+  }, []);
 
   return (
     <div className="relative min-h-screen text-white flex items-center justify-center overflow-hidden">

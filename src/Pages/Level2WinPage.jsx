@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 export default function Round2Win() {
   const navigate = useNavigate();
@@ -39,6 +40,25 @@ export default function Round2Win() {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    // Call API to submit Level 2 score
+    const submitLevel2 = async () => {
+      const email = localStorage.getItem("userEmail");
+      if (email) {
+        try {
+          await api.post("/level2/submit", {
+            email,
+            score: 100, // Fixed score or dynamic if needed
+            submissionTime: new Date().toISOString()
+          });
+        } catch (err) {
+          console.error("Failed to submit Level 2 score:", err);
+        }
+      }
+    };
+    submitLevel2();
   }, []);
 
   return (

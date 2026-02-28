@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { eventTime } from "../assets/Data";
+import api from "../api"; // Custom axios instance
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const calculateTimeLeft = () => {
     const now = new Date();
@@ -21,10 +25,10 @@ export default function LoginPage() {
     };
   };
 
-  const [timeLeft, setTimeLeft] = React.useState(calculateTimeLeft());
-  const [isEventStarted, setIsEventStarted] = React.useState(false);
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [isEventStarted, setIsEventStarted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       const updatedTime = calculateTimeLeft();
       setTimeLeft(updatedTime);
@@ -42,14 +46,26 @@ export default function LoginPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEventStarted) {
-      navigate("/welcome");
-    } else {
+    if (!isEventStarted) {
       alert(
         `Event will start in ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`
       );
+      return;
+    }
+    setErrorMsg("");
+
+    try {
+      const response = await api.post("/users/login", { email, password });
+      if (response.status === 200) {
+        localStorage.setItem("userEmail", response.data.user.email);
+        localStorage.setItem("teamName", response.data.user.teamName);
+        navigate("/welcome");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      setErrorMsg(error.response?.data?.message || "Login failed. Please try again.");
     }
   };
 
@@ -70,7 +86,10 @@ export default function LoginPage() {
               </label>
               <input
                 type="text"
-                className="rounded-md w-full placeholder-slate-400 bg-white/20 border border-white/30 p-3 focus:outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="rounded-md w-full placeholder-slate-400 bg-white/20 border border-white/30 p-3 focus:outline-none text-white"
               />
             </div>
 
@@ -78,18 +97,26 @@ export default function LoginPage() {
               <label className="text-slate-200 text-sm">Password</label>
               <input
                 type="password"
-                className="rounded-md w-full placeholder-slate-400 bg-white/20 border border-white/30 p-3 focus:outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="rounded-md w-full placeholder-slate-400 bg-white/20 border border-white/30 p-3 focus:outline-none text-white"
               />
             </div>
+
+            {errorMsg && (
+              <div className="text-red-400 text-sm text-center font-semibold">
+                {errorMsg}
+              </div>
+            )}
 
             <button
               type="submit"
               disabled={!isEventStarted}
-              className={`mt-2 rounded-md bg-gradient-to-r from-purple-600 to-blue-900 py-3 font-semibold text-white transition ${
-                isEventStarted
+              className={`mt-2 rounded-md bg-gradient-to-r from-purple-600 to-blue-900 py-3 font-semibold text-white transition ${isEventStarted
                   ? "cursor-pointer hover:from-purple-700 hover:to-blue-800"
                   : "cursor-not-allowed opacity-70"
-              }`}
+                }`}
             >
               {isEventStarted
                 ? "Login"
