@@ -26,9 +26,9 @@ const puzzleBlocks = {
   "1-1": "flow",
   "1-2": "sudoku",
   "2-0": "slider",
-  "0-1": "bishops",
+  // "0-1": "bishops",
   "0-2": "checkmate",
-  "1-0": "tango",
+  // "1-0": "tango",
   "2-1": "zip",
   "2-2": "hanoi",
 };

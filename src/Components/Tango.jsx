@@ -48,8 +48,6 @@ export default function Tango({ onWin }) {
     setCells(updated);
   };
 
-  // ===== VALIDATION LOGIC =====
-
   const validateBoard = () => {
     const badRows = new Set();
     const badCols = new Set();
@@ -144,13 +142,13 @@ useEffect(() => {
 }, [isComplete]);
 
 return (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-black flex items-center justify-center text-gray-200">
+  <div className=" flex items-center justify-center text-gray-200">
 
     <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 shadow-2xl rounded-3xl p-10 max-w-5xl">
 
       {/* ===== TITLE ===== */}
-      <h1 className="text-3xl font-bold text-center mb-6 tracking-wide text-indigo-400">
-        Tango 6×6
+      <h1 className="text-3xl font-bold font-sans text-center mb-6 tracking-wide text-indigo-400">
+        TANGO
       </h1>
 
       {/* ===== OBJECTIVE & RULES ===== */}
@@ -233,6 +231,13 @@ return (
 
           </div>
         ))}
+        <div className="flex justify-end mt-4  ">
+          <button 
+          onClick={()=>
+            setCells(initialCells)
+          }
+          className="bg-blue-800 rounded-xl text-lg px-5 py-1.5 cursor-pointer">Reset</button>
+        </div>
 
       </div>
 

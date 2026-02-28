@@ -15,6 +15,9 @@ import Level2WinPage from "./Pages/Level2WinPage";
 import GameWinning from "./Pages/GameWinningPage";
 import UnqualifiedPage from "./Components/UnqualifiedPage";
 import Dashboard from "./Components/Dashboard";
+import AdminLogin from "./Components/AdminLogin";
+import AdminDashboard from "./Components/AdminDashboard";
+import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 
 function App() {
   return (
@@ -37,7 +40,21 @@ function App() {
           <Route path="/gamewin" element={<GameWinning />} />
           <Route path="/unqualified" element={<UnqualifiedPage />} />
           <Route path="/board" element={<Dashboard />} />
-          
+
+          <Route
+            path="/admin/login"
+            element={<AdminLogin />}
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+              </AdminProtectedRoute>
+            }
+          />
+
         </Routes>
       </BrowserRouter>
     </>
