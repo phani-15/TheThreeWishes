@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import FlowGame from "../components/FlowGame";
-import Tango from "../components/Tango";
-import HanoiGame from "../components/TowersOfHanoi";
-import Zip from "../components/Zip";
+import FlowGame from "../Components/FlowGame";
+import Tango from "../Components/Tango";
+import HanoiGame from "../Components/TowersOfHanoi";
+import Zip from "../Components/Zip";
 import Checkmate from "../Components/CheckMate";
 import Sudoku from "../Components/Sudoku"
-import Slider from "../components/Slider";
+import Slider from "../Components/Slider";
 import EightBishops from "../Components/EightBishops";
 import { useNavigate } from "react-router-dom";
 
@@ -23,13 +23,13 @@ const PUZZLE_META = {
 };
 
 const puzzleBlocks = {
-  // "1-1": "flow",
-  // "1-2": "sudoku",
-  // "2-0": "slider",
-  // "0-1": "bishops",
-  // "0-2": "checkmate",
-  // "1-0": "tango",
-  // "2-1": "zip",
+  "1-1": "flow",
+  "1-2": "sudoku",
+  "2-0": "slider",
+  "0-1": "bishops",
+  "0-2": "checkmate",
+  "1-0": "tango",
+  "2-1": "zip",
   "2-2": "hanoi",
 };
 
