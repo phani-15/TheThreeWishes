@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Poppins:wght@400;500&display=swap');
-
+.title-font {
+  font-family: 'Cinzel', serif;
+}
 
 body {
   margin: 0;
@@ -9,15 +10,22 @@ body {
   overflow-x: hidden;
 }
 
-/* ================= APP LAYOUT ================= */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+@font-face {
+  font-family: "ArabianNights";
+  src: url("/CinzelDecorative-Bold.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
 
 .app {
   position: relative;
   width: 100%;
   min-height: 100vh;
 }
-
-/* ================= BLURRED BACKGROUND ================= */
 
 .background-layer {
   position: fixed;
@@ -28,11 +36,10 @@ body {
   background-size: cover;
   background-position: center;
   filter: blur(8px);
-  transform: scale(1.1); /* prevents white edges after blur */
+  transform: scale(1.1); 
   z-index: -2;
 }
 
-/* Dark overlay for cinematic look */
 .background-layer::after {
   content: "";
   position: absolute;
@@ -41,16 +48,11 @@ body {
   background: rgba(0, 0, 0, 0.6);
 }
 
-/* Content stays sharp */
 .content-layer {
   position: relative;
   z-index: 2;
   color: white;
 }
-
-
-
-/* ================= TITLE ================= */
 
 .title-section {
   height: 100vh;
@@ -82,14 +84,9 @@ body {
   font-size: 38px;
 }
 
-
-/* ================= CONVERSATION ================= */
-
 .conversation {
   padding: 20px 20px 40px 20px;
 }
-
-/* MESSAGE ROW */
 
 .message-row {
   display: flex;
@@ -106,18 +103,12 @@ body {
   justify-content: flex-end;
 }
 
-/* CHARACTER IMAGE */
-
 .character-img {
   width: 130px;
   height: auto;
   margin: 0 10px;
   animation: float 3s ease-in-out infinite;
 }
-
-/* MESSAGE BOX */
-
-/* ================= GLASS MESSAGE BOX ================= */
 
 .message-box {
   max-width: 55%;
@@ -134,13 +125,11 @@ body {
   color: white;
 }
 
-/* Genie tint */
 .message-box.genie {
   background: rgba(78, 115, 223, 0.15);
   border: 1px solid rgba(78, 115, 223, 0.4);
 }
 
-/* Aladdin tint */
 .message-box.aladdin {
   background: rgba(246, 194, 62, 0.15);
   border: 1px solid rgba(246, 194, 62, 0.4);
@@ -151,15 +140,11 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* FLOAT */
-
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
-
-/* START BUTTON */
 
 .start-section {
   text-align: center;
@@ -179,4 +164,12 @@ body {
 .start-btn:hover {
   transform: scale(1.08);
   background: orange;
+}
+
+@layer components {
+  .control-btn {
+    @apply bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 
+           disabled:text-gray-600 text-white px-6 py-2 rounded-lg 
+           transition duration-200;
+  }
 }

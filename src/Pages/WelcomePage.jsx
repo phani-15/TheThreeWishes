@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import TitleSection from "../components/TitleSection";
-import Conversation from "../components/Conversation";
+import TitleSection from "../Components/TitleSection";
+import Conversation from "../Components/Conversation";
 
 import caveBg from "../assets/cave.jpg";
 import myVideo from "../assets/myVideo.mp4";
-import map1 from "../assets/map1.jpg";
 
 function WelcomePage() {
   const [shrinkTitle, setShrinkTitle] = useState(false);
@@ -25,62 +24,6 @@ function WelcomePage() {
     }
   };
 
-  const handleStartJourney = () => {
-    setShowVideo(true);
-  };
-
-  // 🔥 Video Page with Blurred Background
-  if (showVideo) {
-    return (
-      <div
-        style={{
-          position: "relative",
-          width: "100vw",
-          height: "100vh",
-          overflow: "hidden",
-        }}
-      >
-        {/* Blurred Map Background */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `url(${map1})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            filter: "blur(10px)",
-            transform: "scale(1.1)", // prevents blur edges
-          }}
-        ></div>
-
-        {/* Video Layer */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <video
-            src={myVideo}
-            autoPlay
-            playsInline
-            style={{
-              maxWidth: "80%",
-              maxHeight: "80%",
-              objectFit: "contain",
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-
   // 🔥 Default Page (Title + Conversation)
   return (
     <div className="app">
@@ -91,12 +34,14 @@ function WelcomePage() {
 
       <div className="content-layer">
         <TitleSection
+          title="THE THREE WISHES"
           shrink={shrinkTitle}
           onTransitionEnd={handleTransitionEnd}
-        />
+/>
+
 
         {showConversation && (
-          <Conversation onStartJourney={handleStartJourney} />
+          <Conversation />
         )}
       </div>
     </div>
