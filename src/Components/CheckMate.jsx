@@ -14,7 +14,7 @@ const INITIAL_BOARD = {
   "2,5": "wP",  // f6
   "5,2": "wP",  // c4
   "3,0": "wP",  // a5
-  "1,7": "wP",  // h7
+  "1,7": "wB",  // h7
   "1,6": "wP",  // g7
   // ── BLACK (opponent) ──
   "7,1": "bK",  // b1

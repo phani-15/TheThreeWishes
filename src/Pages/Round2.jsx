@@ -8,6 +8,7 @@ import Sudoku from "../Components/Sudoku"
 import Slider from "../Components/Slider";
 import EightBishops from "../Components/EightBishops";
 import { useNavigate } from "react-router-dom";
+import Tiling from "../Components/Tiling"
 
 const GRID_SIZE = 3;
 
@@ -18,7 +19,7 @@ const PUZZLE_META = {
   bishops: { label: "Bishops", icon: "⛪", accent: "bg-violet-400" },
   tango: { label: "Tango", icon: "🎴", accent: "bg-emerald-400" },
   slider: { label: "Slider", icon: "🧩", accent: "bg-amber-400" },
-  zip: { label: "Zip", icon: "⚡", accent: "bg-red-400" },
+  tiling: { label: "tiling", icon: "⚡", accent: "bg-red-400" },
   hanoi: { label: "Hanoi", icon: "🗼", accent: "bg-blue-400" },
 };
 
@@ -26,10 +27,10 @@ const puzzleBlocks = {
   "1-1": "flow",
   "1-2": "sudoku",
   "2-0": "slider",
-  // "0-1": "bishops",
+  "0-1": "bishops",
   "0-2": "checkmate",
-  // "1-0": "tango",
-  "2-1": "zip",
+  "1-0": "tango",
+  "2-1": "tiling",
   "2-2": "hanoi",
 };
 
@@ -83,7 +84,6 @@ export default function Round2() {
     const [row, col] = key.split("-").map(Number);
     setPlayerPos({ row, col });
     setActivePuzzle(null);
-
     if (type === "hanoi") {
       navigate('/win2')
     }
@@ -98,8 +98,8 @@ export default function Round2() {
         return <FlowGame onWin={handleWin} />;
       case "tango":
         return <Tango onWin={handleWin} />;
-      case "zip":
-        return <Zip onWin={handleWin} />;
+      case "tiling":
+        return <Tiling onWin={handleWin} />;
       case "hanoi":
         return <HanoiGame onWin={handleWin} />;
       case "checkmate":
@@ -142,7 +142,7 @@ export default function Round2() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050508] text-[#e8e0d0] flex flex-col items-center overflow-hidden pb-16">
+    <div className=" bg-[#050508] text-[#e8e0d0] flex flex-col items-center overflow-hidden pb-16">
       {/* Ambient glow */}
       <div
         className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] rounded-full opacity-[0.06]"
@@ -179,34 +179,6 @@ export default function Round2() {
           </div>
         </div>
 
-        {/* ── Progress bar ── */}
-        <div className="mt-8 w-72 text-center">
-          <p className="text-[11px] tracking-[0.2em] text-amber-500/60 uppercase mb-2">
-            {completedCount} / {totalPuzzles} Solved
-          </p>
-          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(201,168,76,0.5)]"
-              style={{
-                width: `${progressPct}%`,
-                background: "linear-gradient(90deg, #c9a84c, #f0d080)",
-              }}
-            />
-          </div>
-          <div className="flex justify-center gap-2 mt-2.5">
-            {Array.from({ length: totalPuzzles }).map((_, i) => (
-              <div
-                key={i}
-                className={`w-2 h-2 rounded-full border border-amber-500 transition-all duration-500 ${
-                  i < completedCount
-                    ? "bg-amber-500 shadow-[0_0_6px_rgba(201,168,76,0.7)]"
-                    : "opacity-30"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
         {/* ── Puzzle view OR arena map ── */}
         {activePuzzle ? (
           <div className="w-full flex flex-col items-center pt-8">
@@ -221,7 +193,7 @@ export default function Round2() {
             >
               ← Back to Arena
             </button>
-            <div className="w-full flex justify-center">{renderPuzzle()}</div>
+            <div className=" flex justify-center">{renderPuzzle()}</div>
           </div>
         ) : (
           <>
@@ -288,13 +260,12 @@ export default function Round2() {
 
                         {/* Label */}
                         <span
-                          className={`text-[10px] tracking-[0.15em] uppercase font-semibold relative z-10 ${
-                            isPlayer
+                          className={`text-[10px] tracking-[0.15em] uppercase font-semibold relative z-10 ${isPlayer
                               ? "text-amber-400/80"
                               : isCompleted
                                 ? "text-emerald-400/80"
                                 : "text-white/40"
-                          }`}
+                            }`}
                         >
                           {isPlayer
                             ? "You"
@@ -308,9 +279,8 @@ export default function Round2() {
                         {/* Puzzle accent bar */}
                         {meta && (
                           <div
-                            className={`absolute bottom-0 left-3 right-3 h-0.5 rounded-t opacity-70 ${
-                              isCompleted ? "bg-emerald-400" : meta.accent
-                            }`}
+                            className={`absolute bottom-0 left-3 right-3 h-0.5 rounded-t opacity-70 ${isCompleted ? "bg-emerald-400" : meta.accent
+                              }`}
                           />
                         )}
                       </div>

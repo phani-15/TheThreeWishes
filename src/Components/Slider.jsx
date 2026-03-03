@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const Slider = ({onWin,
     gridSize = 3,
-    imageUrl = "/images/cave.jpg",
+    imageUrl = "/images/round2.png",
 }) => {
     const totalTiles = gridSize * gridSize;
 

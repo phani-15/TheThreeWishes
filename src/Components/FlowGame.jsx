@@ -153,27 +153,22 @@ export default function FlowGame({ onWin }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center py-6">
+    <div className=" bg-slate-900 px-20 rounded-2xl text-white flex flex-col items-center py-6">
       <h1 className="text-3xl font-bold mb-2">Robotic Flows</h1>
 
-      <div className="text-center mb-4 max-w-xl">
-        <p className="font-semibold">Objective:</p>
-        <p>Connect matching colored dots without crossing lines and fill every block.</p>
-        <p className="font-semibold mt-2">Rules:</p>
+      <div className="text-center mb-4 ">
+        <p><span className="font-semibold mr-4">Objective:</span>
+        Connect matching colored dots without crossing lines and fill every block.</p>
+        <div className="text-left"> 
+          <p className="font-semibold mt-2">Rules:</p>
         <p>
           • Lines cannot intersect<br/>
           • Cannot pass through other dots<br/>
           • All cells must be filled<br/>
           • Double tap a path to remove it
         </p>
+        </div>
       </div>
-
-      <button
-        onClick={resetGame}
-        className="mb-4 px-4 py-2 bg-red-500 hover:bg-red-600 rounded"
-      >
-        Reset
-      </button>
 
       {completed && (
         <div className="mb-4 text-green-400 font-bold text-xl">
@@ -245,6 +240,14 @@ export default function FlowGame({ onWin }) {
             />
           )}
         </svg>
+      </div>
+      <div className="mt-2 flex w-full mr-10 justify-end">
+      <button
+        onClick={resetGame}
+        className="mb-4 px-4 py-2 bg-red-500 hover:bg-red-600 cursor-pointer rounded"
+      >
+        Reset
+      </button>
       </div>
     </div>
   );

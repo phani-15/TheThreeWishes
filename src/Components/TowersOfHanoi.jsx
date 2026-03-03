@@ -71,8 +71,6 @@ export default function HanoiGame({ onWin }) {
     setMoves(0);
   };
 
-  const minimumMoves = Math.pow(2, DISK_COUNT) - 1;
-
   return (
     <div className="min-h-screen bg-[#0f172a] text-gray-200 flex flex-col items-center p-10">
 
@@ -85,7 +83,7 @@ export default function HanoiGame({ onWin }) {
           Move all disks to Tower 3
         </p>
         <p className="text-gray-500 mt-2">
-          Moves: {moves} | Minimum: {minimumMoves}
+          Moves: {moves} 
         </p>
       </div>
 
@@ -107,7 +105,7 @@ export default function HanoiGame({ onWin }) {
               key={towerNum}
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => handleDrop(towerNum)}
-              className="relative w-72 h-[480px] bg-[#1e293b] rounded-2xl shadow-2xl flex items-end justify-center border border-gray-700"
+              className={`relative w-72 h-120 bg-[#1e293b] rounded-2xl shadow-2xl flex items-end justify-center border ${towerNum===3 ? "border-green-500":towerNum===2?"border-red-500":"border-gray-700"}`}
             >
               {/* Pole */}
               <div className="absolute bottom-0 w-3 h-[400px] bg-gray-600 rounded"></div>

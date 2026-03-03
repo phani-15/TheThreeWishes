@@ -35,7 +35,7 @@ const QuizComponent = ({ questions }) => {
       if (
         answers[index] &&
         answers[index].trim().toLowerCase() ===
-          q.correctAnswer.trim().toLowerCase()
+        q.correctAnswer.trim().toLowerCase()
       ) {
         calculatedScore++;
       }
@@ -106,13 +106,47 @@ const QuizComponent = ({ questions }) => {
                   className="rounded-2xl w-90"
                 />
               )}
+              <div className="flex flex-col gap-3 mt-6 w-full">
+                {questions[currentIndex].options.map((option, index) => {
+                  const isSelected = answers[currentIndex] === option;
 
-              <input
-                value={answers[currentIndex] || ""}
-                onChange={handleAnswerChange}
-                className="w-full p-4 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="Write your answer..."
-              />
+                  return (
+                    <div
+                      key={index}
+                      onClick={() =>
+                        setAnswers({
+                          ...answers,
+                          [currentIndex]: option,
+                        })
+                      }
+                      className={`flex items-center gap-4 px-5 py-3 rounded-lg border cursor-pointer transition-all duration-200
+          
+          ${isSelected
+                          ? "border-yellow-400 bg-yellow-400/10"
+                          : "border-white/20 hover:border-white/40"
+                        }
+        `}
+                    >
+                      {/* Option Letter */}
+                      <div
+                        className={`w-8 h-8 flex items-center justify-center rounded-md font-semibold text-sm
+            ${isSelected
+                            ? "bg-yellow-400 text-black"
+                            : "bg-white/10 text-white"
+                          }
+          `}
+                      >
+                        {String.fromCharCode(65 + index)}
+                      </div>
+
+                      {/* Option Text */}
+                      <span className="text-base tracking-wide">
+                        {option}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="mt-10 flex justify-between">
@@ -156,8 +190,8 @@ const QuizComponent = ({ questions }) => {
               {score === questions.length
                 ? "🎉 Perfect score! Redirecting..."
                 : score >= questions.length / 2
-                ? "Good job! Keep it up."
-                : "Don't give up — try again!"}
+                  ? "Good job! Keep it up."
+                  : "Don't give up — try again!"}
             </p>
 
             {/* Correct Questions */}

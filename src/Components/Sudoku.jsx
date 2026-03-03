@@ -87,6 +87,9 @@ export default function Sudoku({ onWin }) {
             })
           )}
         </div>
+        <div className="w-full flex  justify-end mt-2">
+          <button onClick={()=>setBoard(initialPuzzle)} className="bg-blue-800 px-4 rounded-md py-2 cursor-pointer">Reset</button>
+        </div>
 
         {completed && (
           <div className="mt-4 text-green-400 font-bold animate-bounce drop-shadow-lg">

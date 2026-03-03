@@ -13,6 +13,24 @@ export default function Round3Page() {
     "Sand Alchemist",
   ];
 
+  const clues = [
+    "The Desert Nomad guards the Crimson chamber.",
+    "The Palace Scholar lives in the Ivory chamber.",
+    "Arabian Coffee is served in the Emerald chamber.",
+    "Oasis Water is served in the Crimson chamber.",
+    "The Emerald chamber stands immediately to the right of the Ivory chamber.",
+    "The Royal Guard lives in the chamber immediately to the left of the Emerald chamber.",
+    "The Spell Book is kept in the Ivory chamber.",
+    "The guardian of the Golden Camel lives in the Amber chamber.",
+    "The Palace Scholar keeps the White Tiger.",
+    "The Sand Alchemist lives in the first chamber.",
+    "The guardian of the Sapphire chamber carries the Mystic Scroll.",
+    "The Street Magician lives next to the Sapphire chamber.",
+    "The guardian who keeps the Falcon drinks Pomegranate Juice.",
+    "The guardian of the Enchanted Lamp lives next to the one who keeps the Desert Fox.",
+    "The guardian who drinks Oasis Water lives next to the one with the Arabian Horse.",
+  ]
+
   const [camelAnswer, setCamelAnswer] = useState("");
   const [waterAnswer, setWaterAnswer] = useState("");
   const [result, setResult] = useState("");
@@ -80,21 +98,9 @@ export default function Round3Page() {
           <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Clues</h2>
 
           <ol className="space-y-3 list-decimal list-inside">
-            <li>The Desert Nomad guards the Crimson chamber.</li>
-            <li>The Palace Scholar keeps the White Tiger.</li>
-            <li>Arabian Coffee is served in the Emerald chamber.</li>
-            <li>The Emerald chamber stands immediately to the right of the Ivory chamber.</li>
-            <li>The guardian of the Sapphire chamber carries the Mystic Scroll.</li>
-            <li>The Sand Alchemist drinks Mint Tea.</li>
-            <li>The Amber chamber is guarded by the Royal Guard.</li>
-            <li>The Street Magician carries the Golden Ring.</li>
-            <li>The guardian who keeps the Falcon drinks Pomegranate Juice.</li>
-            <li>The Royal Guard lives next to the chamber where Rose Sherbet is served.</li>
-            <li>The guardian of the Enchanted Lamp lives next to the one who keeps the Desert Fox.</li>
-            <li>The Sand Alchemist lives in the first chamber.</li>
-            <li>The Street Magician lives next to the Sapphire chamber.</li>
-            <li>The guardian who drinks Oasis Water lives next to the one with the Arabian Horse.</li>
-            <li>The Spell Book is kept in the Ivory chamber.</li>
+            {clues.map((el,index)=>(
+              <li key = {index}>{el}</li>
+            ))}
           </ol>
         </div>
 
