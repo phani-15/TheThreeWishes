@@ -1,45 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../api";
 
 export default function Dashboard() {
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const teams = [
-    {
-      rank: 1,
-      team: "Giri & Bhavya",
+  useEffect(() => {
+    const fetchScoreboard = async () => {
+      try {
+        const response = await api.get("/scoreboard");
+        setTeams(response.data);
+      } catch (error) {
+        console.error("Error fetching scoreboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      level1Status: "Completed",
-      level2Status: "Completed",
-      level3Status: "Pending",
-
-      level1Points: 121,
-      level2Solved: 4,
-      level3FastestTime: "02:14",
-    },
-    {
-      rank: 2,
-      team: "Techtonic",
-
-      level1Status: "Completed",
-      level2Status: "Completed",
-      level3Status: "Completed",
-
-      level1Points: 117,
-      level2Solved: 3,
-      level3FastestTime: "02:45",
-    },
-    {
-      rank: 3,
-      team: "Team JK",
-
-      level1Status: "Completed",
-      level2Status: "In Progress",
-      level3Status: "Locked",
-
-      level1Points: 113,
-      level2Solved: 2,
-      level3FastestTime: "--",
-    },
-  ];
+    fetchScoreboard();
+    const interval = setInterval(fetchScoreboard, 5000); // refresh every 5s
+    return () => clearInterval(interval);
+  }, []);
 
   const getStatusColor = (status) => {
     if (status === "Completed") return "text-green-400";
@@ -52,7 +33,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-black text-white px-6 py-12 relative overflow-hidden">
 
       {/* Golden Glow Background */}
-      <div className="absolute w-[600px] h-[600px] bg-yellow-500 opacity-10 blur-3xl rounded-full top-[-200px] left-[-200px]"></div>
+      <div className="absolute w-150 h-150 bg-yellow-500 opacity-10 blur-3xl rounded-full top-[-200px] left-[-200px]"></div>
 
       {/* Title */}
       <div className="text-center mb-12 relative z-10">
@@ -69,7 +50,7 @@ export default function Dashboard() {
                       backdrop-blur-md overflow-hidden">
 
         <table className="w-full text-center font-cinzel tracking-wide text-sm md:text-base">
-          
+
           <thead className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black">
             <tr>
               <th className="py-4">Rank</th>
