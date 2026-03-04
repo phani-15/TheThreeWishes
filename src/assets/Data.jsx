@@ -1,4 +1,4 @@
-export const level2Time = new Date("2026-02-27T16:39:59")
+export const level2Time = new Date("2026-03-04T22:48:59")
 
 export const eventTime = new Date("2026-02-28T15:09:59")
 

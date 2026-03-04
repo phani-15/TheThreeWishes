@@ -12,11 +12,19 @@ const Level1Quiz = () => {
     ]
   },
   {
-    question: "There is a robot on an 3 x 7 grid. The robot is initially located at the top-left corner and tries to move to the bottom-right corner.The robot can only move either down or right at any point in time.How many number of possible unique paths that the robot can take to reach the bottom-right corner.",
-    image :"/images/robot_maze.png",
-    correctAnswer: "28",
+    question: "What is the degree of the array\t [1,3,4,3,2,3,4,2,5,3,4,2,1,3,5,1]",
+    correctAnswer: "5",
     options : [
-      "40","21","28","30"
+      "1","4","3","5"
+    ],
+    note :" the Degree of the array is defined as the maximum frequency of any one of its elements."
+  },
+  {
+    question: "Which of the following is an UGLY number ",
+    correctAnswer: "48",
+    note:"An ugly number is a positive integer which does not have a prime factor other than 2, 3, and 5.",
+    options: [
+      "95","51","84","48"
     ]
   },
   {
@@ -27,13 +35,6 @@ const Level1Quiz = () => {
       "25","26","27","28"
     ],
     note:"root is the top most one and leaf is any node from the bottom that has no extension "
-  },
-  {
-    question: "Is 19 a happy number?(yes/no) \n\nA happy number is a number defined as :\nStarting with any positive integer, replace the number by the sum of the squares of its digits.\nRepeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.\nThose numbers for which this process ends in 1 are happy.",
-    correctAnswer: "yes",
-    options: [
-      "yes","no"
-    ]
   },
   {
     question: "Below image representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",

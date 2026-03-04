@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import FlowGame from "../Components/FlowGame";
 import Tango from "../Components/Tango";
 import HanoiGame from "../Components/TowersOfHanoi";
-import Zip from "../Components/Zip";
 import Checkmate from "../Components/CheckMate";
 import Sudoku from "../Components/Sudoku"
 import Slider from "../Components/Slider";
@@ -24,10 +23,10 @@ const PUZZLE_META = {
 };
 
 const puzzleBlocks = {
-  "1-1": "flow", 
+  // "1-1": "flow", 
   "1-2": "sudoku",
   "2-0": "slider",
-  "0-1": "bishops",
+  // "0-1": "bishops",
   "0-2": "checkmate",
   "1-0": "tango",
   "2-1": "tiling",
@@ -44,10 +43,8 @@ export default function Round2() {
   const totalPuzzles = Object.keys(puzzleBlocks).length;
   const progressPct = Math.round((completedCount / totalPuzzles) * 100);
 
-  // Track the path from 0-0 to 2-2 based on solved puzzles
   const path = ["0-0", ...Object.keys(completedBlocks)];
 
-  // Only allow movement to adjacent tiles that are either solved or have a puzzle to solve
   const isAdjacent = (r, c) => {
     const { row, col } = playerPos;
     return (
@@ -143,7 +140,6 @@ export default function Round2() {
 
   return (
     <div className=" bg-[#050508] text-[#e8e0d0] flex flex-col items-center overflow-hidden pb-16">
-      {/* Ambient glow */}
       <div
         className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] rounded-full opacity-[0.06]"
         style={{
@@ -152,7 +148,6 @@ export default function Round2() {
       />
 
       <div className="relative z-10 flex flex-col items-center w-full">
-        {/* ── Header ── */}
         <div className="text-center pt-14 mb-2">
           <p className="text-[11px] tracking-[0.35em] text-amber-500/80 uppercase font-light mb-3">
             Challenge Series
@@ -171,7 +166,6 @@ export default function Round2() {
             Puzzle Arena
           </h1>
 
-          {/* Divider */}
           <div className="flex items-center gap-3 mt-4 mx-auto w-64">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
             <div className="w-1.5 h-1.5 bg-amber-500/70 rotate-45" />
@@ -179,7 +173,6 @@ export default function Round2() {
           </div>
         </div>
 
-        {/* ── Puzzle view OR arena map ── */}
         {activePuzzle ? (
           <div className="w-full flex flex-col items-center pt-8">
             <button
@@ -220,7 +213,6 @@ export default function Round2() {
                         )}
                         onClick={() => handleBlockClick(r, c)}
                       >
-                        {/* Ripple ring */}
                         {ripple === key && (
                           <div
                             className="absolute inset-0 rounded-2xl border-2 border-amber-400 pointer-events-none"
@@ -230,7 +222,6 @@ export default function Round2() {
                           />
                         )}
 
-                        {/* Player corner ornaments */}
                         {isPlayer && (
                           <>
                             <span className="absolute top-2 left-2 w-3 h-3 border-t border-l border-amber-500/60" />
@@ -258,7 +249,6 @@ export default function Round2() {
                                 : "·"}
                         </span>
 
-                        {/* Label */}
                         <span
                           className={`text-[10px] tracking-[0.15em] uppercase font-semibold relative z-10 ${isPlayer
                               ? "text-amber-400/80"
@@ -276,7 +266,6 @@ export default function Round2() {
                                 : `${r},${c}`}
                         </span>
 
-                        {/* Puzzle accent bar */}
                         {meta && (
                           <div
                             className={`absolute bottom-0 left-3 right-3 h-0.5 rounded-t opacity-70 ${isCompleted ? "bg-emerald-400" : meta.accent
@@ -297,7 +286,6 @@ export default function Round2() {
         )}
       </div>
 
-      {/* Single keyframe needed for the ripple animation — not achievable with Tailwind alone */}
       <style>{`@keyframes rippleOut { from { transform:scale(0.85); opacity:0.75; } to { transform:scale(1.2); opacity:0; } }`}</style>
     </div>
   );

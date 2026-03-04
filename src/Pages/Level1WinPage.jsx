@@ -4,7 +4,7 @@ import api from "../api";
 
 export default function Round1WinPage() {
   const [showMap, setShowMap] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(3); // 5 minutes = 300 seconds
+  const [timeLeft, setTimeLeft] = useState(10); // 5 minutes = 300 seconds
   const navigate = useNavigate();
 
   // Show map after delay

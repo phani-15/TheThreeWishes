@@ -8,6 +8,7 @@ const QuizComponent = ({ questions }) => {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [scores, setScores] = useState([20,20,20,20,20])
 
   const handleAnswerChange = (e) => {
     setAnswers({
@@ -31,14 +32,19 @@ const QuizComponent = ({ questions }) => {
   const handleSubmit = () => {
     let calculatedScore = 0;
     let c = 0;
+    let updatedScores = [...scores];
     questions.forEach((q, index) => {
-      if (
-        answers[index] &&
+      if ( answers[index] ){
+        if(
         answers[index].trim().toLowerCase() ===
         q.correctAnswer.trim().toLowerCase()
       ) {
-        calculatedScore += 20;
+        calculatedScore += updatedScores[index];
       }
+      else{
+        updatedScores[index] -= 5;
+        setScores(updatedScores)
+      }}
       if (answers[index]) c++;
     });
 
@@ -89,7 +95,7 @@ const QuizComponent = ({ questions }) => {
 
             <div className="flex flex-col justify-center items-center gap-5">
               <div className="w-full text-left">
-                <p className="text-lg mb-6 whitespace-pre-line">
+                <p className="text-lg mb-6 whitespace-pre-wrap">
                   {questions[currentIndex].question}
                 </p>
                 {questions[currentIndex].note && (
@@ -182,7 +188,7 @@ const QuizComponent = ({ questions }) => {
           <div>
             {/* Score Header */}
             <h2 className="text-3xl font-bold mb-2 text-center">
-              Your Score: {score} / {questions.length}
+              Your Score: {score} / 100
             </h2>
             <p className="text-center text-white/50 mb-8">
               {score === questions.length
@@ -238,10 +244,6 @@ const QuizComponent = ({ questions }) => {
                           <span className="text-red-300">
                             {answers[originalIndex] || "Not answered"}
                           </span>
-                        </p>
-                        <p className="text-sm mt-0.5">
-                          Correct answer:{" "}
-                          <span className="text-green-400">{q.correctAnswer}</span>
                         </p>
                       </div>
                     );
