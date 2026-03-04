@@ -37,7 +37,7 @@ const QuizComponent = ({ questions }) => {
         answers[index].trim().toLowerCase() ===
         q.correctAnswer.trim().toLowerCase()
       ) {
-        calculatedScore++;
+        calculatedScore += 20;
       }
       if (answers[index]) c++;
     });
@@ -55,7 +55,6 @@ const QuizComponent = ({ questions }) => {
     setCurrentIndex(0);
   };
 
-  // ✅ REDIRECT LOGIC
   useEffect(() => {
     if (submitted && score === questions.length) {
       const timer = setTimeout(() => {
@@ -80,7 +79,7 @@ const QuizComponent = ({ questions }) => {
 
   return (
     <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl p-10 flex gap-12 border border-white/10">
-      {/* LEFT SIDE */}
+
       <div className="flex-1">
         {!submitted && (
           <>
@@ -127,7 +126,7 @@ const QuizComponent = ({ questions }) => {
                         }
         `}
                     >
-                      {/* Option Letter */}
+                      
                       <div
                         className={`w-8 h-8 flex items-center justify-center rounded-md font-semibold text-sm
             ${isSelected
@@ -139,7 +138,6 @@ const QuizComponent = ({ questions }) => {
                         {String.fromCharCode(65 + index)}
                       </div>
 
-                      {/* Option Text */}
                       <span className="text-base tracking-wide">
                         {option}
                       </span>

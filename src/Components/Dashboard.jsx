@@ -101,7 +101,7 @@ export default function Dashboard() {
                   <span className="text-yellow-300 font-semibold">
                     {team.level2Solved}
                   </span>
-                  <span className="text-gray-400"> / 4</span>
+                  <span className="text-gray-400"> / 100</span>
                 </td>
 
                 {/* Level 3 Status */}
