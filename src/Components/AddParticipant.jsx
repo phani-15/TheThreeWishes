@@ -216,51 +216,118 @@ export default function AddParticipant() {
         const reader = new FileReader();
 
         reader.onload = async (event) => {
-            const data = new Uint8Array(event.target.result);
-            const workbook = XLSX.read(data, { type: "array" });
+            try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
 
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
 
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-            let successCount = 0;
-            let failCount = 0;
-
-            for (const row of jsonData) {
-                try {
-                    // Prevent duplicate emails (frontend check)
-                    const alreadyExists = participants.some(
-                        (p) => p.email === row.email
-                    );
-
-                    if (alreadyExists) {
-                        failCount++;
-                        continue;
-                    }
-
-                    await api.post("/users/register", {
-                        name: row.name,
-                        teamName: row.teamName,
-                        email: row.email,
-                        password: row.registrationId, // 🔥 registrationId used as password
-                        college: row.college
-                    });
-
-                    successCount++;
-                } catch (error) {
-                    console.error("Error adding:", row.email);
-                    failCount++;
+                // Validate that the Excel file has required columns
+                if (jsonData.length === 0) {
+                    alert("❌ Excel file is empty!");
+                    setLoading(false);
+                    return;
                 }
+
+                const firstRow = jsonData[0];
+                const requiredColumns = ["name", "teamName", "email", "registrationId", "college"];
+                const actualColumns = Object.keys(firstRow);
+                
+                console.log("Found columns:", actualColumns);
+                console.log("Required columns:", requiredColumns);
+
+                // Check for missing columns (case-insensitive)
+                const missingColumns = requiredColumns.filter(
+                    (col) => !actualColumns.some((ac) => ac.toLowerCase() === col.toLowerCase())
+                );
+
+                if (missingColumns.length > 0) {
+                    alert(`❌ Missing required columns in Excel file:\n${missingColumns.join(", ")}\n\nYour columns: ${actualColumns.join(", ")}`);
+                    setLoading(false);
+                    return;
+                }
+
+                let successCount = 0;
+                let failCount = 0;
+                const errors = [];
+
+                for (let i = 0; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    try {
+                        // Trim whitespace and handle case-insensitive column access
+                        const email = (row.email || row.Email || "").trim();
+                        const name = (row.name || row.Name || "").trim();
+                        const teamName = (row.teamName || row.TeamName || row.Team || "").trim();
+                        const password = (row.registrationId || row.RegistrationId || row.registrationID || "").trim();
+                        const college = (row.college || row.College || "").trim();
+
+                        // Validate required fields
+                        if (!email || !name || !teamName || !password || !college) {
+                            errors.push(`Row ${i + 2}: Missing required fields (all fields must be filled)`);
+                            failCount++;
+                            continue;
+                        }
+
+                        // Basic email validation
+                        if (!email.includes("@")) {
+                            errors.push(`Row ${i + 2}: Invalid email format - ${email}`);
+                            failCount++;
+                            continue;
+                        }
+
+                        // Prevent duplicate emails
+                        const alreadyExists = participants.some(
+                            (p) => p.email.toLowerCase() === email.toLowerCase()
+                        );
+
+                        if (alreadyExists) {
+                            errors.push(`Row ${i + 2}: Email already registered - ${email}`);
+                            failCount++;
+                            continue;
+                        }
+
+                        await api.post("/users/register", {
+                            name,
+                            teamName,
+                            email,
+                            password,
+                            college
+                        });
+
+                        successCount++;
+                    } catch (error) {
+                        const errorMsg = error.response?.data?.message || error.message || "Unknown error";
+                        errors.push(`Row ${i + 2}: ${errorMsg}`);
+                        console.error("Error adding participant:", error);
+                        failCount++;
+                    }
+                }
+
+                // Create detailed error report
+                let reportMessage = `Bulk Upload Completed ✅\n\nSuccessfully Added: ${successCount}\nFailed / Skipped: ${failCount}`;
+                
+                if (errors.length > 0 && errors.length <= 10) {
+                    reportMessage += `\n\n❌ Errors:\n${errors.join("\n")}`;
+                } else if (errors.length > 10) {
+                    reportMessage += `\n\n❌ First 10 errors:\n${errors.slice(0, 10).join("\n")}\n\n... and ${errors.length - 10} more errors`;
+                }
+
+                alert(reportMessage);
+
+                if (successCount > 0) {
+                    setBulkFile(null);
+                    fetchParticipants();
+                }
+                
+                setLoading(false);
+            } catch (error) {
+                console.error("Error reading Excel file:", error);
+                alert("❌ Error reading Excel file. Make sure it's a valid Excel (.xlsx) file.");
+                setLoading(false);
             }
-
-            alert(`Bulk Upload Completed ✅ 
-Successfully Added: ${successCount}
-Failed / Skipped: ${failCount}`);
-
-            setBulkFile(null);
-            fetchParticipants();
-            setLoading(false);
         };
 
         reader.readAsArrayBuffer(bulkFile);
