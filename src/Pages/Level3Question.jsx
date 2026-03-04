@@ -5,31 +5,26 @@ import LogicGrid from "../Components/LogicGrid";
 export default function Round3Page() {
   const navigate = useNavigate();
 
+  // Reduced to 4 guardians (easier)
   const guardians = [
     "Desert Nomad",
     "Palace Scholar",
     "Royal Guard",
     "Street Magician",
-    "Sand Alchemist",
   ];
 
+  // Simplified clues (9 total)
   const clues = [
-    "The Desert Nomad guards the Crimson chamber.",
+    "The Desert Nomad lives in the Crimson chamber.",
     "The Palace Scholar lives in the Ivory chamber.",
-    "Arabian Coffee is served in the Emerald chamber.",
     "Oasis Water is served in the Crimson chamber.",
-    "The Emerald chamber stands immediately to the right of the Ivory chamber.",
-    "The Royal Guard lives in the chamber immediately to the left of the Emerald chamber.",
-    "The Spell Book is kept in the Ivory chamber.",
-    "The guardian of the Golden Camel lives in the Amber chamber.",
+    "The Royal Guard keeps the Golden Camel.",
+    "The Street Magician lives next to the Royal Guard.",
     "The Palace Scholar keeps the White Tiger.",
-    "The Sand Alchemist lives in the first chamber.",
-    "The guardian of the Sapphire chamber carries the Mystic Scroll.",
-    "The Street Magician lives next to the Sapphire chamber.",
-    "The guardian who keeps the Falcon drinks Pomegranate Juice.",
-    "The guardian of the Enchanted Lamp lives next to the one who keeps the Desert Fox.",
-    "The guardian who drinks Oasis Water lives next to the one with the Arabian Horse.",
-  ]
+    "The guardian in the Sapphire chamber drinks Pomegranate Juice.",
+    "The Royal Guard does not live in the Ivory chamber.",
+    "The Desert Nomad does not keep the Golden Camel.",
+  ];
 
   const [camelAnswer, setCamelAnswer] = useState("");
   const [waterAnswer, setWaterAnswer] = useState("");
@@ -40,9 +35,10 @@ export default function Round3Page() {
   const checkAnswer = () => {
     if (locked) return;
 
+    // Correct Answer (Easier Version)
     if (
-      camelAnswer === "Street Magician" &&
-      waterAnswer === "Street Magician"
+      camelAnswer === "Royal Guard" &&
+      waterAnswer === "Desert Nomad"
     ) {
       setLocked(true);
 
@@ -50,20 +46,22 @@ export default function Round3Page() {
         navigate("/win");
       }, 700);
     } else {
-      setWrongs((prev) => prev + 1);
+      const newWrongs = wrongs + 1;
+      setWrongs(newWrongs);
 
-      if (wrongs >= 4) {
+      if (newWrongs >= 5) {
         setLocked(true);
         setResult("❌ Incorrect. The final wish is lost.");
       } else {
-        setResult("Incorrect");
+        setResult("Incorrect. Try again.");
       }
     }
   };
 
   return (
     <div className="relative min-h-screen text-white">
-      {/* Blurred Background Image */}
+      
+      {/* Blurred Background */}
       <div
         className="absolute inset-0 bg-cover bg-center blur-[2px] scale-105"
         style={{ backgroundImage: "url('/images/treasure_room.jpg')" }}
@@ -74,6 +72,7 @@ export default function Round3Page() {
 
       {/* Page Content */}
       <div className="relative z-10 p-6">
+
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-yellow-400 tracking-wide">
@@ -84,7 +83,7 @@ export default function Round3Page() {
         {/* INTRO */}
         <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl mb-8 border border-yellow-500/30">
           <p className="text-lg leading-relaxed">
-            Five magical chambers stand before you. Each chamber holds a unique
+            Four magical chambers stand before you. Each chamber holds a unique
             guardian, artifact, drink and companion.
             <br />
             <span className="text-yellow-400 font-semibold">
@@ -95,11 +94,13 @@ export default function Round3Page() {
 
         {/* CLUES */}
         <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl mb-8 max-h-96 overflow-y-auto border border-yellow-500/30">
-          <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Clues</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-yellow-400">
+            Clues
+          </h2>
 
           <ol className="space-y-3 list-decimal list-inside">
-            {clues.map((el,index)=>(
-              <li key = {index}>{el}</li>
+            {clues.map((clue, index) => (
+              <li key={index}>{clue}</li>
             ))}
           </ol>
         </div>
@@ -134,7 +135,10 @@ export default function Round3Page() {
             <select
               disabled={locked}
               value={waterAnswer}
-              onChange={(e) => setWaterAnswer(e.target.value)}
+              onChange={(e) => {
+                setWaterAnswer(e.target.value);
+                setResult("");
+              }}
               className="bg-black/50 p-3 rounded-lg border border-yellow-500"
             >
               <option value="">Who drinks Oasis Water?</option>
@@ -155,7 +159,9 @@ export default function Round3Page() {
           </button>
 
           {result && (
-            <p className="mt-4 text-lg font-semibold text-center">{result}</p>
+            <p className="mt-4 text-lg font-semibold text-center">
+              {result}
+            </p>
           )}
         </div>
       </div>
