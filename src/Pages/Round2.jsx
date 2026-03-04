@@ -29,7 +29,7 @@ const puzzleBlocks = {
   // "0-1": "bishops",
   "0-2": "checkmate",
   "1-0": "tango",
-  "2-1": "tiling",
+  // "2-1": "tiling",
   "2-2": "hanoi",
 };
 
