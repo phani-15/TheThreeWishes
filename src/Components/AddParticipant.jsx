@@ -175,7 +175,6 @@ export default function AddParticipant() {
         fetchParticipants();
     }, []);
 
-    // ✅ Single participant registration
     const addParticipant = async (e) => {
         e.preventDefault();
         setErrorMsg("");
@@ -204,7 +203,6 @@ export default function AddParticipant() {
         }
     };
 
-    // ✅ Bulk upload from Excel
     const addParticipants = async () => {
         if (!bulkFile) {
             alert("Please upload an Excel file.");
