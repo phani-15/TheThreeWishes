@@ -96,7 +96,7 @@ const HomePage = () => {
           <h1 className="title-font text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-wider
                          bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-300
                          bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,200,0,0.6)]">
-            COME ON !! TAKLE THE CHALLENGE
+            COME ON !! TAKE THE CHALLENGE
           </h1>
 
           <p className="mt-6 text-gray-300 text-lg sm:text-xl leading-relaxed">
