@@ -24,7 +24,7 @@ const PUZZLE_META = {
 };
 
 const puzzleBlocks = {
-  "1-1": "flow",
+  "1-1": "flow", 
   "1-2": "sudoku",
   "2-0": "slider",
   "0-1": "bishops",
