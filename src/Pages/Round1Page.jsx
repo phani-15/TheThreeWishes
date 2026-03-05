@@ -46,8 +46,8 @@ export default function Round1Page() {
         rules={[
           "Solve logical challenges within the time limit",
           "No external help is allowed",
-          "Each question is worth 5 points",
-          "You can retry but it costs 2 points deduction"
+          "Each question is worth 20 points",
+          "You can retry but it costs 5 points deduction"
         ]}
       />
     </div>

@@ -8,6 +8,7 @@ import Slider from "../Components/Slider";
 import EightBishops from "../Components/EightBishops";
 import { useNavigate } from "react-router-dom";
 import Tiling from "../Components/Tiling"
+import { useEffect } from "react";
 
 const GRID_SIZE = 3;
 
@@ -23,17 +24,18 @@ const PUZZLE_META = {
 };
 
 const puzzleBlocks = {
-  // "1-1": "flow", 
+  "1-1": "flow", 
   "1-2": "sudoku",
   "2-0": "slider",
-  // "0-1": "bishops",
+  "0-1": "bishops",
   "0-2": "checkmate",
   "1-0": "tango",
-  // "2-1": "tiling",
+  "2-1": "tiling",
   "2-2": "hanoi",
 };
 
 export default function Round2() {
+  const [timeLeft, setTimeLeft] = useState(1800)
   const [playerPos, setPlayerPos] = useState({ row: 0, col: 0 });
   const [completedBlocks, setCompletedBlocks] = useState({});
   const [activePuzzle, setActivePuzzle] = useState(null);
@@ -52,6 +54,22 @@ export default function Round2() {
       (Math.abs(col - c) === 1 && row === r)
     );
   };
+
+    const navigate = useNavigate()  
+    useEffect(() => {
+      if (timeLeft > 0) {
+        const interval = setInterval(() => {
+          setTimeLeft((prev) => prev - 1);
+        }, 1000);
+  
+        return () => clearInterval(interval);
+      }
+      else {
+        navigate('/unqualified')
+        return
+      }
+  
+    }, [timeLeft, navigate]);
 
   const handleBlockClick = (r, c) => {
     const key = `${r}-${c}`;
@@ -85,8 +103,6 @@ export default function Round2() {
       navigate('/win2')
     }
   };
-
-  const navigate = useNavigate()
 
   const renderPuzzle = () => {
     if (!activePuzzle) return null;
@@ -171,6 +187,10 @@ export default function Round2() {
             <div className="w-1.5 h-1.5 bg-amber-500/70 rotate-45" />
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
           </div>
+        </div>
+        
+        <div className="absolute top-5 right-6 text-lg font-bold text-yellow-400">
+          Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60}
         </div>
 
         {activePuzzle ? (

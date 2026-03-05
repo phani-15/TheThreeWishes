@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogicGrid from "../Components/LogicGrid";
+import { useEffect } from "react";
 
 export default function Round3Page() {
   const navigate = useNavigate();
+    const [timeLeft, setTimeLeft] = useState(900)
 
   // Reduced to 4 guardians (easier)
   const guardians = [
@@ -13,17 +15,16 @@ export default function Round3Page() {
     "Street Magician",
   ];
 
-  // Simplified clues (9 total)
   const clues = [
     "The Desert Nomad lives in the Crimson chamber.",
     "The Palace Scholar lives in the Ivory chamber.",
     "Oasis Water is served in the Crimson chamber.",
+    "The Royal Guard lives in the Jade chamber.",
     "The Royal Guard keeps the Golden Camel.",
-    "The Street Magician lives next to the Royal Guard.",
     "The Palace Scholar keeps the White Tiger.",
+    "The Desert Nomad keeps the Desert Hawk.",
     "The guardian in the Sapphire chamber drinks Pomegranate Juice.",
-    "The Royal Guard does not live in the Ivory chamber.",
-    "The Desert Nomad does not keep the Golden Camel.",
+    "The guardian in the Jade chamber drinks Spiced Coffee.",
   ];
 
   const [camelAnswer, setCamelAnswer] = useState("");
@@ -58,6 +59,21 @@ export default function Round3Page() {
     }
   };
 
+      useEffect(() => {
+        if (timeLeft > 0) {
+          const interval = setInterval(() => {
+            setTimeLeft((prev) => prev - 1);
+          }, 1000);
+    
+          return () => clearInterval(interval);
+        }
+        else {
+          navigate('/unqualified')
+          return
+        }
+    
+      }, [timeLeft, navigate]);
+
   return (
     <div className="relative min-h-screen text-white">
       
@@ -90,6 +106,9 @@ export default function Round3Page() {
               Discover who guards the Golden Camel and who drinks Oasis Water.
             </span>
           </p>
+        </div>
+        <div className="absolute top-5 right-6 text-lg font-bold text-yellow-400">
+          Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60}
         </div>
 
         {/* CLUES */}

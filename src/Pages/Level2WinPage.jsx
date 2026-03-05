@@ -82,18 +82,16 @@ export default function Round2Win() {
   mb-8
   animate-fadeIn
 ">
-          Bravo!! You did well. Here take this Magical potion to turn invisible
+         You did well. Here take this Magical potion to turn invisible
 
         </h1>
 
-        {/* Potion Image */}
         <img
           src="/images/Round2Win.png"
           alt="Magical Potion"
           className="w-48 md:w-60 mx-auto mb-8 drop-shadow-[0_0_40px_gold] animate-pulse"
         />
 
-        {/* Timer */}
         {isEventStarted ?
           <button
             onClick={() => navigate("/third")}

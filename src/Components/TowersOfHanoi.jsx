@@ -27,6 +27,7 @@ export default function HanoiGame({ onWin }) {
   const [message, setMessage] = useState("");
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
+  const [showWonMsg, setShowWonMsg] = useState(false);
   const [shakeTower, setShakeTower] = useState(null);
   const [particles, setParticles] = useState([]);
   const [hoverTower, setHoverTower] = useState(null);
@@ -88,8 +89,14 @@ export default function HanoiGame({ onWin }) {
 
     if (updated.filter((d) => d.tower === 3).length === DISK_COUNT) {
       setWon(true);
+      setShowWonMsg(true);
       spawnParticles();
-      onWin && onWin();
+
+
+      setTimeout(() => {
+        setShowWonMsg(false);
+      if (onWin) onWin();
+      }, 5000);
     }
   };
 
@@ -143,6 +150,7 @@ export default function HanoiGame({ onWin }) {
     setMessage("");
     setMoves(0);
     setWon(false);
+    setShowWonMsg(false);
     setParticles([]);
   };
 
@@ -150,69 +158,73 @@ export default function HanoiGame({ onWin }) {
 
   return (
     <div
-    className="rounded-2xl w-[70vw]"
-    style={{
-      background: "radial-gradient(ellipse at 20% 10%, #1a0a2e 0%, #0d0d1a 40%, #050510 100%)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      fontFamily: "'Georgia', 'Times New Roman', serif",
-      padding: "32px 16px",
-      position: "relative",
-      overflow: "hidden",
-    }}>
+      className="rounded-2xl w-[70vw]"
+      style={{
+        background: "radial-gradient(ellipse at 20% 10%, #1a0a2e 0%, #0d0d1a 40%, #050510 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        fontFamily: "'Georgia', 'Times New Roman', serif",
+        padding: "32px 16px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
       <Stars />
 
-      <div 
-      className="rounded-2xl"
-      style={{ position:"absolute", top:"-120px", left:"10%",
-        background:"radial-gradient(circle, rgba(99,40,180,0.18) 0%, transparent 70%)", pointerEvents:"none" }} />
-      <div style={{ position:"absolute", bottom:"-80px", right:"5%", width:"350px", height:"350px",
-        background:"radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", pointerEvents:"none" }} />
+      <div
+        className="rounded-2xl"
+        style={{
+          position: "absolute", top: "-120px", left: "10%",
+          background: "radial-gradient(circle, rgba(99,40,180,0.18) 0%, transparent 70%)", pointerEvents: "none"
+        }} />
+      <div style={{
+        position: "absolute", bottom: "-80px", right: "5%", width: "350px", height: "350px",
+        background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", pointerEvents: "none"
+      }} />
 
       {particles.map(p => (
         <div key={p.id} style={{
-          position:"fixed", left:`${p.x}%`, top:`${p.y}%`,
-          width:`${p.size}px`, height:`${p.size}px`,
-          borderRadius:"50%", background:p.color,
-          pointerEvents:"none", zIndex:100,
-          animation:"floatUp 1.4s ease-out forwards",
+          position: "fixed", left: `${p.x}%`, top: `${p.y}%`,
+          width: `${p.size}px`, height: `${p.size}px`,
+          borderRadius: "50%", background: p.color,
+          pointerEvents: "none", zIndex: 100,
+          animation: "floatUp 1.4s ease-out forwards",
         }} />
       ))}
 
-      <div style={{ textAlign:"center", marginBottom:"28px", position:"relative", zIndex:1 }} >
-        <div style={{ fontSize:"11px", letterSpacing:"6px", color:"#7c6fa0", textTransform:"uppercase", marginBottom:"8px" }}>
+      <div style={{ textAlign: "center", marginBottom: "28px", position: "relative", zIndex: 1 }} >
+        <div style={{ fontSize: "11px", letterSpacing: "6px", color: "#7c6fa0", textTransform: "uppercase", marginBottom: "8px" }}>
           Classic Puzzle
         </div>
         <h1 style={{
-          fontSize:"clamp(28px, 5vw, 48px)", fontWeight:"normal", margin:0,
-          background:"linear-gradient(135deg, #e2d5f8 0%, #a78bfa 40%, #67e8f9 100%)",
-          WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-          letterSpacing:"3px", textShadow:"none",
+          fontSize: "clamp(28px, 5vw, 48px)", fontWeight: "normal", margin: 0,
+          background: "linear-gradient(135deg, #e2d5f8 0%, #a78bfa 40%, #67e8f9 100%)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          letterSpacing: "3px", textShadow: "none",
         }}>
           Towers of Hanoi
         </h1>
-        <div style={{ width:"80px", height:"1px", background:"linear-gradient(90deg, transparent, #7c3aed, transparent)", margin:"12px auto 0" }} />
+        <div style={{ width: "80px", height: "1px", background: "linear-gradient(90deg, transparent, #7c3aed, transparent)", margin: "12px auto 0" }} />
       </div>
 
-      <div 
-      className="mb-10"
-      style={{
-        display:"flex", gap:"24px",
-        background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)",
-        borderRadius:"16px", padding:"14px 32px", backdropFilter:"blur(10px)",
-        position:"relative", zIndex:1,
-      }}>
+      <div
+        className="mb-10"
+        style={{
+          display: "flex", gap: "24px",
+          background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "16px", padding: "14px 32px", backdropFilter: "blur(10px)",
+          position: "relative", zIndex: 1,
+        }}>
         <Stat label="Moves" value={moves} />
-        <div style={{ width:"1px", background:"rgba(255,255,255,0.1)" }} />
+        <div style={{ width: "1px", background: "rgba(255,255,255,0.1)" }} />
         <Stat label="Optimal" value={OPTIMAL_MOVES} />
-        <div style={{ width:"1px", background:"rgba(255,255,255,0.1)" }} />
+        <div style={{ width: "1px", background: "rgba(255,255,255,0.1)" }} />
         <Stat label="Efficiency" value={moves === 0 ? "—" : (moves <= OPTIMAL_MOVES ? "✦ Perfect" : `+${moves - OPTIMAL_MOVES}`)} accent={moves > 0 && moves <= OPTIMAL_MOVES} />
       </div>
 
       <div style={{
-        display:"flex", gap:"clamp(16px, 4vw, 52px)", position:"relative", zIndex:1,
-        alignItems:"flex-end",
+        display: "flex", gap: "clamp(16px, 4vw, 52px)", position: "relative", zIndex: 1,
+        alignItems: "flex-end",
       }}>
         {[1, 2, 3].map((towerNum) => {
           const towerDisks = getTowerDisks(towerNum);
@@ -228,36 +240,36 @@ export default function HanoiGame({ onWin }) {
               onDragLeave={() => setHoverTower(null)}
               onDrop={() => { handleDrop(towerNum); setHoverTower(null); }}
               style={{
-                position:"relative",
-                width:"clamp(180px, 22vw, 240px)",
-                height:"280px",
-                display:"flex", alignItems:"flex-end", justifyContent:"center",
+                position: "relative",
+                width: "clamp(180px, 22vw, 240px)",
+                height: "280px",
+                display: "flex", alignItems: "flex-end", justifyContent: "center",
                 cursor: selectedDisk ? "pointer" : "default",
                 animation: isShaking ? "shake 0.5s ease" : "none",
               }}
             >
               {/* Tower base */}
               <div style={{
-                position:"absolute", bottom:0,
-                width:"100%", height:"18px",
+                position: "absolute", bottom: 0,
+                width: "100%", height: "18px",
                 background: isTarget
                   ? "linear-gradient(90deg, #064e3b, #10b981, #064e3b)"
                   : "linear-gradient(90deg, #1e1040, #4c1d95, #1e1040)",
-                borderRadius:"10px",
+                borderRadius: "10px",
                 boxShadow: isTarget
                   ? "0 0 18px rgba(16,185,129,0.5), 0 4px 12px rgba(0,0,0,0.6)"
                   : "0 0 12px rgba(124,58,237,0.3), 0 4px 12px rgba(0,0,0,0.6)",
-                transition:"all 0.3s",
+                transition: "all 0.3s",
               }} />
 
               {/* Pole */}
               <div style={{
-                position:"absolute", bottom:"16px",
-                width:"10px", height:"250px",
+                position: "absolute", bottom: "16px",
+                width: "10px", height: "250px",
                 background: isTarget
                   ? "linear-gradient(180deg, #6ee7b7, #059669, #6ee7b7)"
                   : "linear-gradient(180deg, #a78bfa, #5b21b6, #a78bfa)",
-                borderRadius:"6px",
+                borderRadius: "6px",
                 boxShadow: isTarget
                   ? "0 0 14px rgba(16,185,129,0.4)"
                   : "0 0 10px rgba(139,92,246,0.4)",
@@ -265,10 +277,10 @@ export default function HanoiGame({ onWin }) {
 
               {/* Tower label */}
               <div style={{
-                position:"absolute", top:"-28px",
-                fontSize:"11px", letterSpacing:"3px", textTransform:"uppercase",
+                position: "absolute", top: "-28px",
+                fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase",
                 color: isTarget ? "#6ee7b7" : "#9d8ec4",
-                fontFamily:"monospace",
+                fontFamily: "monospace",
               }}>
                 {isTarget ? "★ Goal" : `Tower ${towerNum}`}
               </div>
@@ -276,9 +288,9 @@ export default function HanoiGame({ onWin }) {
               {/* Drop zone highlight */}
               {(isHovered || (selectedDisk && isHovered)) && (
                 <div style={{
-                  position:"absolute", inset:0, borderRadius:"12px",
-                  background:"rgba(168,85,247,0.08)", border:"1px dashed rgba(168,85,247,0.4)",
-                  pointerEvents:"none",
+                  position: "absolute", inset: 0, borderRadius: "12px",
+                  background: "rgba(168,85,247,0.08)", border: "1px dashed rgba(168,85,247,0.4)",
+                  pointerEvents: "none",
                 }} />
               )}
 
@@ -296,31 +308,31 @@ export default function HanoiGame({ onWin }) {
                     onDragStart={(e) => handleDragStart(e, disk)}
                     onClick={(e) => { e.stopPropagation(); handleDiskClick(disk); }}
                     style={{
-                      position:"absolute",
-                      height:`${DISK_HEIGHT - 6}px`,
-                      width:`${w}px`,
-                      bottom:`${18 + index * DISK_HEIGHT}px`,
-                      left:"50%", transform:`translateX(-50%) ${isSelected ? "translateY(-10px) scale(1.06)" : ""}`,
+                      position: "absolute",
+                      height: `${DISK_HEIGHT - 6}px`,
+                      width: `${w}px`,
+                      bottom: `${18 + index * DISK_HEIGHT}px`,
+                      left: "50%", transform: `translateX(-50%) ${isSelected ? "translateY(-10px) scale(1.06)" : ""}`,
                       background: col.bg,
-                      borderRadius:"10px",
-                      border:`2px solid ${isSelected ? "white" : col.border}`,
+                      borderRadius: "10px",
+                      border: `2px solid ${isSelected ? "white" : col.border}`,
                       boxShadow: isSelected
                         ? `0 0 0 3px white, 0 0 24px ${col.shadow}, 0 8px 20px rgba(0,0,0,0.5)`
                         : `0 0 14px ${col.shadow}, 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.25)`,
                       cursor: isTop && !won ? "grab" : "default",
-                      transition:"all 0.22s cubic-bezier(0.34,1.56,0.64,1)",
+                      transition: "all 0.22s cubic-bezier(0.34,1.56,0.64,1)",
                       zIndex: isSelected ? 20 : 10,
-                      display:"flex", alignItems:"center", justifyContent:"center",
+                      display: "flex", alignItems: "center", justifyContent: "center",
                     }}
                   >
                     {/* Disk shine */}
                     <div style={{
-                      position:"absolute", top:"3px", left:"10%", right:"10%", height:"35%",
-                      background:"linear-gradient(180deg, rgba(255,255,255,0.3), transparent)",
-                      borderRadius:"6px 6px 0 0", pointerEvents:"none",
+                      position: "absolute", top: "3px", left: "10%", right: "10%", height: "35%",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.3), transparent)",
+                      borderRadius: "6px 6px 0 0", pointerEvents: "none",
                     }} />
                     {/* Disk number */}
-                    <span style={{ fontSize:"11px", fontWeight:"bold", color:"rgba(255,255,255,0.7)", fontFamily:"monospace", letterSpacing:"1px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: "bold", color: "rgba(255,255,255,0.7)", fontFamily: "monospace", letterSpacing: "1px" }}>
                       {disk.size}
                     </span>
                   </div>
@@ -333,24 +345,24 @@ export default function HanoiGame({ onWin }) {
 
       {/* Message */}
       <div style={{
-        marginTop:"28px", minHeight:"40px", textAlign:"center", position:"relative", zIndex:1,
+        marginTop: "28px", minHeight: "40px", textAlign: "center", position: "relative", zIndex: 1,
       }}>
         {message && !won && (
           <div style={{
-            fontSize:"15px", color:"#f87171",
-            background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.2)",
-            borderRadius:"10px", padding:"8px 20px",
-            animation:"fadeSlideIn 0.3s ease",
+            fontSize: "15px", color: "#f87171",
+            background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",
+            borderRadius: "10px", padding: "8px 20px",
+            animation: "fadeSlideIn 0.3s ease",
           }}>
             {message}
           </div>
         )}
-        {won && (
+        {showWonMsg && (
           <div style={{
-            fontSize:"22px", fontWeight:"normal", letterSpacing:"2px",
-            background:"linear-gradient(135deg, #fbbf24, #f59e0b, #fde68a)",
-            WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
-            animation:"fadeSlideIn 0.5s ease",
+            fontSize: "22px", fontWeight: "normal", letterSpacing: "2px",
+            background: "linear-gradient(135deg, #fbbf24, #f59e0b, #fde68a)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            animation: "fadeSlideIn 0.5s ease",
           }}>
             ✦ Solved in {moves} moves ✦
           </div>
@@ -359,27 +371,27 @@ export default function HanoiGame({ onWin }) {
 
       {/* Hint */}
       {!won && (
-        <p style={{ color:"#4b4069", fontSize:"12px", marginTop:"16px", letterSpacing:"1px", position:"relative", zIndex:1 }}>
+        <p style={{ color: "#4b4069", fontSize: "12px", marginTop: "16px", letterSpacing: "1px", position: "relative", zIndex: 1 }}>
           Click a disk to select · drag to move · click a tower to place
         </p>
       )}
 
       {/* Buttons */}
-      <div style={{ display:"flex", gap:"12px", marginTop:"20px", position:"relative", zIndex:1 }}>
+      <div style={{ display: "flex", gap: "12px", marginTop: "20px", position: "relative", zIndex: 1 }}>
         <button
           onClick={handleReset}
           style={{
-            padding:"10px 28px",
-            background:"linear-gradient(135deg, #4c1d95, #7c3aed)",
-            border:"1px solid rgba(167,139,250,0.4)",
-            borderRadius:"12px", color:"#e9d5ff",
-            fontSize:"14px", letterSpacing:"1.5px", cursor:"pointer",
-            boxShadow:"0 0 20px rgba(124,58,237,0.3), 0 4px 12px rgba(0,0,0,0.4)",
-            transition:"all 0.2s",
-            fontFamily:"inherit",
+            padding: "10px 28px",
+            background: "linear-gradient(135deg, #4c1d95, #7c3aed)",
+            border: "1px solid rgba(167,139,250,0.4)",
+            borderRadius: "12px", color: "#e9d5ff",
+            fontSize: "14px", letterSpacing: "1.5px", cursor: "pointer",
+            boxShadow: "0 0 20px rgba(124,58,237,0.3), 0 4px 12px rgba(0,0,0,0.4)",
+            transition: "all 0.2s",
+            fontFamily: "inherit",
           }}
-          onMouseEnter={e => e.target.style.transform="scale(1.04)"}
-          onMouseLeave={e => e.target.style.transform="scale(1)"}
+          onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
+          onMouseLeave={e => e.target.style.transform = "scale(1)"}
         >
           Reset
         </button>
@@ -411,11 +423,11 @@ export default function HanoiGame({ onWin }) {
 
 function Stat({ label, value, accent }) {
   return (
-    <div style={{ textAlign:"center", minWidth:"70px" }}>
-      <div style={{ fontSize:"22px", fontWeight:"normal", color: accent ? "#6ee7b7" : "#e2d5f8", letterSpacing:"1px" }}>
+    <div style={{ textAlign: "center", minWidth: "70px" }}>
+      <div style={{ fontSize: "22px", fontWeight: "normal", color: accent ? "#6ee7b7" : "#e2d5f8", letterSpacing: "1px" }}>
         {value}
       </div>
-      <div style={{ fontSize:"10px", color:"#6b5e8a", letterSpacing:"2px", textTransform:"uppercase", marginTop:"2px" }}>
+      <div style={{ fontSize: "10px", color: "#6b5e8a", letterSpacing: "2px", textTransform: "uppercase", marginTop: "2px" }}>
         {label}
       </div>
     </div>
@@ -432,14 +444,14 @@ function Stars() {
     dur: 2 + Math.random() * 3,
   }));
   return (
-    <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:0 }}>
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
       {stars.map(s => (
         <div key={s.id} style={{
-          position:"absolute",
-          left:`${s.x}%`, top:`${s.y}%`,
-          width:`${s.size}px`, height:`${s.size}px`,
-          borderRadius:"50%", background:"white",
-          animation:`twinkle ${s.dur}s ${s.delay}s ease-in-out infinite`,
+          position: "absolute",
+          left: `${s.x}%`, top: `${s.y}%`,
+          width: `${s.size}px`, height: `${s.size}px`,
+          borderRadius: "50%", background: "white",
+          animation: `twinkle ${s.dur}s ${s.delay}s ease-in-out infinite`,
         }} />
       ))}
     </div>

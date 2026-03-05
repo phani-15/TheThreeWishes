@@ -2,14 +2,13 @@ import React, { useState } from "react";
 
 export default function LogicGrid() {
 
-  const houses = [1, 2, 3, 4, 5];
+  const houses = [1, 2, 3, 4];
 
   const categories = {
-    color: ["Crimson", "Emerald", "Ivory", "Sapphire", "Amber"],
-    guardian: ["Desert Nomad", "Palace Scholar", "Royal Guard", "Street Magician", "Sand Alchemist"],
-    artifact: ["Enchanted Lamp", "Mystic Scroll", "Golden Ring", "Spell Book", "Crystal Dagger"],
-    drink: ["Arabian Coffee", "Mint Tea", "Pomegranate Juice", "Rose Sherbet", "Oasis Water"],
-    companion: ["Falcon", "Golden Camel", "White Tiger", "Desert Fox", "Arabian Horse"]
+    chamber: ["Crimson", "Ivory", "Sapphire", "Jade"],
+    guardian: ["Desert Nomad", "Palace Scholar", "Royal Guard", "Street Magician"],
+    drink: ["Oasis Water", "Mint Tea", "Pomegranate Juice", "Spiced Coffee"],
+    companion: ["Desert Hawk", "White Tiger", "Silver Fox", "Golden Camel"],
   };
 
   const [grid, setGrid] = useState({});
@@ -33,7 +32,7 @@ export default function LogicGrid() {
       <table className="w-full text-center border border-yellow-500">
         <thead>
           <tr>
-            <th className="border border-yellow-500 p-2">House</th>
+            <th className="border border-yellow-500 p-2">Position</th>
             {Object.keys(categories).map((cat) => (
               <th key={cat} className="border border-yellow-500 p-2 capitalize">
                 {cat}
