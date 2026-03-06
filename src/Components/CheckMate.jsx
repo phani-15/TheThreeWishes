@@ -7,36 +7,35 @@ const PIECES = {
 
 const INITIAL_BOARD = {
   // ── WHITE (you play as these) ──
-  "2,7": "wK",  // h6
-  "2,6": "wQ",  // g6
-  "4,3": "wR",  // e4
-  "3,4": "wN",  // e5
-  "2,5": "wP",  // f6
-  "5,2": "wP",  // c4
-  "3,0": "wP",  // a5
-  "1,7": "wB",  // h7
-  "1,6": "wP",  // g7
+  "2,7": "wK",
+  "2,6": "wQ",
+  "4,3": "wR",
+  "3,4": "wN",
+  "2,5": "wP",
+  "5,2": "wP",
+  "3,0": "wP",
+  "1,7": "wB",
+  "1,6": "wP",
   // ── BLACK (opponent) ──
-  "7,1": "bK",  // b1
-  "0,1": "bQ",  // b8
-  "0,6": "bR",  // g8
-  "6,7": "bP",  // h2
-  "6,2": "bP",  // e2
-  "6,1": "bP",  // b2
-  "5,1": "bP",  // b3
-  "4,6": "bP",  // g4
-  "4,5": "bP",  // f5
+  "7,1": "bK",
+  "0,1": "bQ",
+  "0,6": "bR",
+  "6,7": "bP",
+  "6,2": "bP",
+  "6,1": "bP",
+  "5,1": "bP",
+  "4,6": "bP",
+  "4,5": "bP",
 };
 
 // ── solution move constants ──────────────────────────────────
-const MOVE1_FROM = "2,6";  // wQ g6
-const MOVE1_TO   = "6,2";  // wQ c2  (check — forces bK to a1)
-const BLACK_FROM = "7,1";  // bK b1
-const BLACK_TO   = "7,0";  // bK a1  (only legal square)
-const MOVE2_FROM = "4,3";  // wR e4
-const MOVE2_TO   = "4,0";  // wR a4  (CHECKMATE)
+const MOVE1_FROM = "2,6";  // wQ
+const MOVE1_TO   = "6,2";  // wQ → check, forces bK to corner
+const BLACK_FROM = "7,1";  // bK
+const BLACK_TO   = "7,0";  // bK → only legal square
+const MOVE2_FROM = "4,3";  // wR
+const MOVE2_TO   = "4,0";  // wR → CHECKMATE
 
-// ── helpers ──────────────────────────────────────────────────
 function isCorrectFrom(key, step) {
   return step === 1 ? key === MOVE1_FROM : key === MOVE2_FROM;
 }
@@ -46,7 +45,6 @@ function isCorrectTo(from, to, step) {
     : from === MOVE2_FROM && to === MOVE2_TO;
 }
 
-// ── component ─────────────────────────────────────────────────
 export default function CheckmateGame({ onWin }) {
   const [board, setBoard] = useState(INITIAL_BOARD);
   const [selected, setSelected] = useState(null);
@@ -54,10 +52,11 @@ export default function CheckmateGame({ onWin }) {
   const [phase, setPhase] = useState("white");
   const [alert, setAlert] = useState(null);
   const [blackMoveAnim, setBlackMoveAnim] = useState(null);
+  const [winFired, setWinFired] = useState(false);
 
   const flashAlert = (type) => {
     setAlert({ type });
-    if (type === "wrong") setTimeout(() => setAlert(null), 1800);
+    if (type === "wrong") setTimeout(() => setAlert(null), 1500);
   };
 
   const triggerBlackMove = useCallback((currentBoard) => {
@@ -110,15 +109,12 @@ export default function CheckmateGame({ onWin }) {
     }
   }, [board, selected, step, phase, triggerBlackMove]);
 
-  // ── Call onWin 5 seconds after congrats appears ─────────────
+  // Fire onWin after congrats shows briefly
   useEffect(() => {
-    if (phase === "done" && alert?.type === "congrats" && onWin) {
-      const timer = setTimeout(() => {
-        onWin();
-      }, 5000);
-      return () => clearTimeout(timer);
+    if (phase === "done" && alert?.type === "congrats" && !winFired) {
+      setTimeout(()=>onWin(),2000)
     }
-  }, [phase, alert, onWin]);
+  }, [phase, alert, onWin, winFired]);
 
   const resetGame = () => {
     setBoard(INITIAL_BOARD);
@@ -127,38 +123,46 @@ export default function CheckmateGame({ onWin }) {
     setPhase("white");
     setAlert(null);
     setBlackMoveAnim(null);
+    setWinFired(false);
   };
 
   const files = ["a","b","c","d","e","f","g","h"];
   const ranks = ["8","7","6","5","4","3","2","1"];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 font-serif"
-         style={{ background: "radial-gradient(ellipse at center, #2a1a08 0%, #0e0905 100%)" }}>
-
+    <div
+      className="flex flex-col items-center justify-center p-6 font-serif"
+      style={{ background: "transparent" }}
+    >
       {/* ── Title ─────────────────────────────────────────── */}
-      <div className="mb-4 text-center">
-        <h1 className="text-4xl font-bold tracking-widest text-amber-300 m-0"
-            style={{ textShadow: "0 0 28px #f59e0b88, 0 2px 0 #000" }}>
+      <div className="mb-5 text-center">
+        <h1
+          className="text-3xl font-bold tracking-widest text-amber-300"
+          style={{ textShadow: "0 0 20px #f59e0b66, 0 2px 0 #000" }}
+        >
           CHECKMATE
         </h1>
-        <p className="text-[#78350f] text-[11px] mt-1 tracking-widest uppercase">
-          Two-Move Puzzle · You are White
+        <p className="text-amber-700 text-[11px] mt-1 tracking-widest uppercase">
+          Two-Move Puzzle · You are Black
+        </p>
+        <p className="text-slate-400 text-[11px] mt-0.5">
+          Step {step}/2 — {step === 1 ? "Find the decisive first move" : "Deliver checkmate!"}
         </p>
       </div>
 
       {/* ── Board ─────────────────────────────────────────── */}
-      <div className="drop-shadow-[0_10px_50px_rgba(0,0,0,0.7)]">
-        <div className="p-3 rounded-xl border-[3px] border-[#92400e]"
-             style={{ 
-               background: "linear-gradient(145deg, #7c3a10, #451a03, #7c3a10)",
-               boxShadow: "0 0 44px #000"
-             }}>
-
+      <div className="drop-shadow-[0_10px_50px_rgba(0,0,0,0.8)]">
+        <div
+          className="p-3 rounded-xl border-[3px] border-[#92400e]"
+          style={{
+            background: "linear-gradient(145deg, #7c3a10, #451a03, #7c3a10)",
+            boxShadow: "0 0 44px #000",
+          }}
+        >
           {/* file labels — top */}
           <div className="flex mb-1 ml-6">
-            {files.map(f => (
-              <div key={f} className="w-[50px] text-center text-[11px] text-[#92400e] font-bold">
+            {files.map((f) => (
+              <div key={f} className="w-[48px] text-center text-[11px] text-[#92400e] font-bold">
                 {f}
               </div>
             ))}
@@ -167,15 +171,15 @@ export default function CheckmateGame({ onWin }) {
           <div className="flex">
             {/* rank labels — left */}
             <div className="flex flex-col mr-1">
-              {ranks.map(r => (
-                <div key={r} className="h-[50px] w-5 flex items-center justify-center text-[11px] text-[#92400e] font-bold">
+              {ranks.map((r) => (
+                <div key={r} className="h-[48px] w-5 flex items-center justify-center text-[11px] text-[#92400e] font-bold">
                   {r}
                 </div>
               ))}
             </div>
 
             {/* grid */}
-            <div className="grid grid-cols-8 rounded-lg overflow-hidden border border-[#78350f]">
+            <div className="grid grid-cols-8 rounded-lg overflow-hidden border-2 border-[#78350f]">
               {Array.from({ length: 8 }, (_, row) =>
                 Array.from({ length: 8 }, (_, col) => {
                   const key = `${row},${col}`;
@@ -184,25 +188,40 @@ export default function CheckmateGame({ onWin }) {
                   const isSel = selected === key;
                   const isBATo = blackMoveAnim?.to === key;
                   const isBAFr = blackMoveAnim?.from === key;
+                  const isWhitePiece = piece?.startsWith("w");
+                  const isBlackPiece = piece?.startsWith("b");
 
-                  let bgClass = isLight ? "bg-[#f0d9b5]" : "bg-[#b58863]";
-                  if (isSel) bgClass = "bg-[#f9f56b]";
-                  if (isBATo) bgClass = "bg-[#f87171]";
+                  let bg = isLight ? "#f0d9b5" : "#b58863";
+                  if (isSel) bg = "#f9f56b";
+                  else if (isBATo) bg = "#f87171";
 
                   return (
                     <div
                       key={key}
                       onClick={() => handleCellClick(row, col)}
-                      className={`w-[50px] h-[50px] ${bgClass} flex items-center justify-center cursor-pointer relative select-none transition-[background] duration-150`}
+                      className="w-[48px] h-[48px] flex items-center justify-center cursor-pointer relative select-none"
+                      style={{ background: bg, transition: "background 0.15s" }}
                     >
-                      {/* piece glyph */}
                       {piece && (
-                        <span className={`text-[30px] leading-none select-none block transition-all duration-200
-                          ${isBAFr ? "opacity-5" : "opacity-100"}
-                          ${isSel ? "scale-110" : isBATo ? "scale-115" : "scale-100"}
-                          ${piece.startsWith("w") ? "drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]" : "drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]"}
-                          ${piece.startsWith("b") ? "brightness-90" : ""}`}
-                          style={{ filter: piece.startsWith("b") ? "brightness(0.2)" : "" }}>
+                        <span
+                          className={`text-[28px] leading-none select-none block
+                            ${isBAFr ? "opacity-5" : "opacity-100"}
+                            ${isSel ? "scale-110" : isBATo ? "scale-110" : "scale-100"}
+                          `}
+                          style={{
+                            display: "block",
+                            transition: "transform 0.15s, opacity 0.2s",
+                            // White pieces: ivory fill with dark stroke for contrast on any square
+                            color: isWhitePiece ? "#fffff0" : "#1a1008",
+                            WebkitTextStroke: isWhitePiece
+                              ? "1.5px #5a3a10"   // warm dark border on white pieces
+                              : "1px #c8a870",    // light border on black pieces
+                            textShadow: isWhitePiece
+                              ? "0 1px 6px rgba(0,0,0,0.7), 0 0 12px rgba(245,200,80,0.25)"
+                              : "0 1px 4px rgba(0,0,0,0.5)",
+                            filter: isSel ? "drop-shadow(0 0 6px #facc15)" : "none",
+                          }}
+                        >
                           {PIECES[piece]}
                         </span>
                       )}
@@ -214,8 +233,8 @@ export default function CheckmateGame({ onWin }) {
 
             {/* rank labels — right */}
             <div className="flex flex-col ml-1">
-              {ranks.map(r => (
-                <div key={r} className="h-[50px] w-5 flex items-center justify-center text-[11px] text-[#92400e] font-bold">
+              {ranks.map((r) => (
+                <div key={r} className="h-[48px] w-5 flex items-center justify-center text-[11px] text-[#92400e] font-bold">
                   {r}
                 </div>
               ))}
@@ -224,8 +243,8 @@ export default function CheckmateGame({ onWin }) {
 
           {/* file labels — bottom */}
           <div className="flex mt-1 ml-6">
-            {files.map(f => (
-              <div key={f} className="w-[50px] text-center text-[11px] text-[#92400e] font-bold">
+            {files.map((f) => (
+              <div key={f} className="w-[48px] text-center text-[11px] text-[#92400e] font-bold">
                 {f}
               </div>
             ))}
@@ -233,59 +252,71 @@ export default function CheckmateGame({ onWin }) {
         </div>
       </div>
 
+      {/* ── Legend ────────────────────────────────────────── */}
+      <div className="mt-4 flex gap-6 text-[11px] text-slate-400">
+        <span className="flex items-center gap-1.5">
+          <span style={{ color: "#fffff0", WebkitTextStroke: "1px #5a3a10", fontSize: 18 }}>♔</span>
+          White (You)
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span style={{ color: "#1a1008", WebkitTextStroke: "1px #c8a870", fontSize: 18 }}>♚</span>
+          Black (Opponent)
+        </span>
+      </div>
+
+      {/* ── Reset ─────────────────────────────────────────── */}
+      <button
+        onClick={resetGame}
+        className="mt-4 px-5 py-1.5 text-[11px] tracking-widest uppercase rounded-full border border-amber-700/40 text-amber-600 hover:bg-amber-900/20 transition-all"
+      >
+        Reset Puzzle
+      </button>
+
       {/* ── Alert overlays ────────────────────────────────── */}
       {alert && (
-        <div className={`fixed inset-0 z-60 flex items-center justify-center
-          ${alert.type === "congrats" ? "pointer-events-auto bg-black/70" : "pointer-events-none bg-transparent"}`}>
-
-          {/* wrong move */}
+        <div
+          className={`fixed inset-0 z-50 flex items-center justify-center
+            ${alert.type === "congrats" ? "bg-black/70" : "pointer-events-none"}`}
+        >
           {alert.type === "wrong" && (
-            <div className="bg-[#781818f5] border-2 border-red-500 text-red-300 px-9 py-4 rounded-xl text-xl font-bold tracking-wider shadow-[0_8px_40px_#000] animate-shake">
+            <div
+              className="bg-[#781818f5] border-2 border-red-500 text-red-300 px-9 py-4 rounded-xl text-xl font-bold tracking-wider shadow-[0_8px_40px_#000]"
+              style={{ animation: "shake 0.4s ease" }}
+            >
               ✗ Wrong Move
             </div>
           )}
 
-          {/* congratulations */}
           {alert.type === "congrats" && (
-            <div className="relative flex items-center justify-center">
-              <div className="bg-gradient-to-br from-amber-400 to-amber-600 text-black p-7 px-11 rounded-2xl shadow-[0_0_60px_rgba(245,158,11,0.6),0_8px_48px_#000] border-4 border-amber-300 animate-pop-in relative z-10 text-center">
-                <div className="text-[48px]">♔</div>
-                <div className="text-[30px] font-black tracking-wider mt-2">CHECKMATE!</div>
-                <div className="text-[13px] font-semibold opacity-70 mt-1">
-                  Congratulations, Grandmaster! 🎉
-                </div>
-                <div className="text-[11px] mt-3 opacity-80 animate-pulse">
-                  Continuing in {alert.countdown}s...
-                </div>
+            <div
+              className="bg-gradient-to-br from-amber-400 to-amber-600 text-black p-7 px-11 rounded-2xl shadow-[0_0_60px_rgba(245,158,11,0.6),0_8px_48px_#000] border-4 border-amber-300 text-center"
+              style={{ animation: "popIn 0.4s cubic-bezier(0.22,1,0.36,1)" }}
+            >
+              <div className="text-[48px]">♔</div>
+              <div className="text-[28px] font-black tracking-wider mt-1">CHECKMATE!</div>
+              <div className="text-[13px] font-semibold opacity-70 mt-1">
+                Congratulations, Grandmaster! 🎉
+              </div>
+              <div className="text-[11px] mt-3 opacity-70 animate-pulse">
+                Continuing...
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* ── Keyframe CSS (required for custom animations) ─── */}
       <style>{`
         @keyframes shake {
           0%,100%{ transform:translateX(0) }
-          20%{ transform:translateX(-12px) }
-          40%{ transform:translateX(14px) }
-          60%{ transform:translateX(-9px) }
-          80%{ transform:translateX(9px) }
+          20%{ transform:translateX(-10px) }
+          40%{ transform:translateX(12px) }
+          60%{ transform:translateX(-8px) }
+          80%{ transform:translateX(8px) }
         }
-        @keyframes pop-in {
-          0%{ opacity:0; transform:scale(0.22) rotate(-6deg) }
+        @keyframes popIn {
+          0%{ opacity:0; transform:scale(0.3) rotate(-4deg) }
           100%{ opacity:1; transform:scale(1) rotate(0deg) }
         }
-        @keyframes pulse-ring {
-          0%,100%{ opacity:0.6; transform:scale(1) }
-          50%{ opacity:1; transform:scale(1.1) }
-        }
-        @keyframes starBurst0{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(-82px,-64px)scale(1.4)}100%{opacity:.8;transform:translate(-82px,-64px)scale(1)}}
-        @keyframes starBurst1{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(82px,-64px)scale(1.4)}100%{opacity:.8;transform:translate(82px,-64px)scale(1)}}
-        @keyframes starBurst2{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(0,-94px)scale(1.4)}100%{opacity:.8;transform:translate(0,-94px)scale(1)}}
-        @keyframes starBurst3{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(-58px,58px)scale(1.4)}100%{opacity:.8;transform:translate(-58px,58px)scale(1)}}
-        @keyframes starBurst4{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(58px,58px)scale(1.4)}100%{opacity:.8;transform:translate(58px,58px)scale(1)}}
-        @keyframes starBurst5{0%{opacity:0;transform:translate(0,0)scale(0)}70%{opacity:1;transform:translate(0,90px)scale(1.4)}100%{opacity:.8;transform:translate(0,90px)scale(1)}}
       `}</style>
     </div>
   );
