@@ -233,7 +233,7 @@ export default function AddParticipant() {
                 const firstRow = jsonData[0];
                 const requiredColumns = ["name", "teamName", "email", "registrationId", "college"];
                 const actualColumns = Object.keys(firstRow);
-                
+
                 console.log("Found columns:", actualColumns);
                 console.log("Required columns:", requiredColumns);
 
@@ -306,7 +306,7 @@ export default function AddParticipant() {
 
                 // Create detailed error report
                 let reportMessage = `Bulk Upload Completed ✅\n\nSuccessfully Added: ${successCount}\nFailed / Skipped: ${failCount}`;
-                
+
                 if (errors.length > 0 && errors.length <= 10) {
                     reportMessage += `\n\n❌ Errors:\n${errors.join("\n")}`;
                 } else if (errors.length > 10) {
@@ -319,7 +319,7 @@ export default function AddParticipant() {
                     setBulkFile(null);
                     fetchParticipants();
                 }
-                
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error reading Excel file:", error);
@@ -329,6 +329,28 @@ export default function AddParticipant() {
         };
 
         reader.readAsArrayBuffer(bulkFile);
+    };
+
+    const resetParticipants = async (type, id = null, teamName = null) => {
+        const isAll = !id;
+        const confirmMsg = isAll
+            ? `Are you sure you want to reset ${type} for ALL participants? This cannot be undone.`
+            : `Are you sure you want to reset ${type} for team ${teamName}?`;
+
+        if (!window.confirm(confirmMsg)) return;
+
+        try {
+            setLoading(true);
+            const endpoint = isAll ? "/users/reset-all" : `/users/reset/${id}`;
+            const response = await api.post(endpoint, { type });
+            alert(response.data.message || (isAll ? `All participants reset successfully (${type})` : `Participant reset successfully (${type})`));
+            fetchParticipants();
+        } catch (error) {
+            console.error(isAll ? "Error resetting all participants:" : "Error resetting participant:", error);
+            alert("Failed to reset. " + (error.response?.data?.message || ""));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -410,11 +432,10 @@ export default function AddParticipant() {
                         <button
                             onClick={addParticipants}
                             disabled={loading}
-                            className={`px-4 py-2 rounded-lg text-white font-semibold transition ${
-                                loading
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-blue-800 hover:bg-blue-900"
-                            }`}
+                            className={`px-4 py-2 rounded-lg text-white font-semibold transition ${loading
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-blue-800 hover:bg-blue-900"
+                                }`}
                         >
                             {loading ? "Uploading..." : "Submit"}
                         </button>
@@ -424,9 +445,20 @@ export default function AddParticipant() {
 
             {/* Participants List */}
             <div className="bg-white p-6 rounded-xl shadow-lg max-h-screen overflow-y-auto">
-                <h2 className="text-xl font-bold mb-4">
-                    Registered Participants ({participants.length})
-                </h2>
+                <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
+                    <h2 className="text-xl font-bold">
+                        Registered Participants ({participants.length})
+                    </h2>
+                    {participants.length > 0 && (
+                        <div className="flex gap-2 flex-wrap">
+                            <button onClick={() => resetParticipants('login')} disabled={loading} className={`px-2 py-1.5 rounded text-xs font-semibold transition text-white ${loading ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"}`}>Reset All Logins</button>
+                            <button onClick={() => resetParticipants('level1')} disabled={loading} className={`px-2 py-1.5 rounded text-xs font-semibold transition text-white ${loading ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"}`}>Reset All L1</button>
+                            <button onClick={() => resetParticipants('level2')} disabled={loading} className={`px-2 py-1.5 rounded text-xs font-semibold transition text-white ${loading ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"}`}>Reset All L2</button>
+                            <button onClick={() => resetParticipants('level3')} disabled={loading} className={`px-2 py-1.5 rounded text-xs font-semibold transition text-white ${loading ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"}`}>Reset All L3</button>
+                            <button onClick={() => resetParticipants('all')} disabled={loading} className={`px-3 py-1.5 rounded text-xs font-semibold transition text-white ${loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"}`}>Reset All Everything</button>
+                        </div>
+                    )}
+                </div>
 
                 {participants.length === 0 ? (
                     <p className="text-gray-500 italic">
@@ -437,9 +469,9 @@ export default function AddParticipant() {
                         {participants.map((p) => (
                             <div
                                 key={p.id}
-                                className="border border-gray-100 hover:bg-gray-50 p-4 rounded-lg shadow-sm transition"
+                                className="border border-gray-100 hover:bg-gray-50 p-4 rounded-lg shadow-sm transition flex flex-col gap-2"
                             >
-                                <div className="flex justify-between items-start mb-1">
+                                <div className="flex justify-between items-start">
                                     <h3 className="font-bold text-lg text-indigo-900">
                                         {p.teamName}
                                     </h3>
@@ -447,11 +479,22 @@ export default function AddParticipant() {
                                         {p.college}
                                     </span>
                                 </div>
-                                <div className="text-sm text-gray-700 font-medium">
-                                    {p.name}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                    {p.email}
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mt-2">
+                                    <div>
+                                        <div className="text-sm text-gray-700 font-medium">
+                                            {p.name}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            {p.email}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-1.5 flex-wrap">
+                                        <button onClick={() => resetParticipants('login', p.id, p.teamName)} disabled={loading} className={`px-2 py-1 rounded text-xs font-semibold transition ${loading ? "bg-orange-100 text-orange-400 cursor-not-allowed" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>Login</button>
+                                        <button onClick={() => resetParticipants('level1', p.id, p.teamName)} disabled={loading} className={`px-2 py-1 rounded text-xs font-semibold transition ${loading ? "bg-orange-100 text-orange-400 cursor-not-allowed" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>L1</button>
+                                        <button onClick={() => resetParticipants('level2', p.id, p.teamName)} disabled={loading} className={`px-2 py-1 rounded text-xs font-semibold transition ${loading ? "bg-orange-100 text-orange-400 cursor-not-allowed" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>L2</button>
+                                        <button onClick={() => resetParticipants('level3', p.id, p.teamName)} disabled={loading} className={`px-2 py-1 rounded text-xs font-semibold transition ${loading ? "bg-orange-100 text-orange-400 cursor-not-allowed" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>L3</button>
+                                        <button onClick={() => resetParticipants('all', p.id, p.teamName)} disabled={loading} className={`px-2 py-1 rounded text-xs font-bold transition ${loading ? "bg-red-200 text-red-500 cursor-not-allowed" : "bg-red-100 text-red-700 hover:bg-red-200"}`}>All</button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
