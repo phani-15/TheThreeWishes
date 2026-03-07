@@ -80,7 +80,7 @@ const Level1Quiz = () => {
         ) {
           calculatedScore += updatedScores[index];
         }
-        else {
+        else if(updatedScores[index] > 0){
           updatedScores[index] -= 5;
         }
       }

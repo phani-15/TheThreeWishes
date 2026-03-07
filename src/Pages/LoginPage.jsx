@@ -82,7 +82,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label className="text-slate-200 text-sm">
-                UserName / eMail
+                email
               </label>
               <input
                 type="text"
@@ -114,8 +114,8 @@ export default function LoginPage() {
               type="submit"
               disabled={!isEventStarted}
               className={`mt-2 rounded-md bg-gradient-to-r from-purple-600 to-blue-900 py-3 font-semibold text-white transition ${isEventStarted
-                  ? "cursor-pointer hover:from-purple-700 hover:to-blue-800"
-                  : "cursor-not-allowed opacity-70"
+                ? "cursor-pointer hover:from-purple-700 hover:to-blue-800"
+                : "cursor-not-allowed opacity-70"
                 }`}
             >
               {isEventStarted
