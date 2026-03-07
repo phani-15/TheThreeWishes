@@ -19,7 +19,7 @@ export default function Round3Page() {
     "The Desert Nomad lives in the Crimson chamber.",
     "The Palace Scholar lives in the Ivory chamber.",
     "The Guardian who had the Desert hawk will drink Mint Tea",
-    "The Royal Guard keeps the Golden Camel.",
+    "Golden Camel is with the guardian who drinks Spiced Coffee.",
     "The Palace Scholar keeps the White Tiger.",
     "The Desert Nomad keeps the Desert Hawk.",
     "The guardian in the Sapphire chamber drinks Pomegranate Juice.",
@@ -39,7 +39,7 @@ export default function Round3Page() {
     // Correct Answer (Easier Version)
     if (
       camelAnswer === "Royal Guard" &&
-      waterAnswer === "Desert Nomad"
+      waterAnswer === "Palace Scholar"
     ) {
       setLocked(true);
 
