@@ -19,11 +19,11 @@ export default function Round3Page() {
     "The Desert Nomad lives in the Crimson chamber.",
     "The Palace Scholar lives in the Ivory chamber.",
     "The Guardian who had the Desert hawk will drink Mint Tea",
-    "The Royal Guard lives in the Jade chamber.",
     "The Royal Guard keeps the Golden Camel.",
     "The Palace Scholar keeps the White Tiger.",
     "The Desert Nomad keeps the Desert Hawk.",
     "The guardian in the Sapphire chamber drinks Pomegranate Juice.",
+    "The Royal Guard lives in the Jade chamber.",
     "The guardian in the Jade chamber drinks Spiced Coffee.",
   ];
 
