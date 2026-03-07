@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function Round3Page() {
   const navigate = useNavigate();
-    const [timeLeft, setTimeLeft] = useState(900)
+  const [timeLeft, setTimeLeft] = useState(600)
 
   // Reduced to 4 guardians (easier)
   const guardians = [
@@ -18,7 +18,7 @@ export default function Round3Page() {
   const clues = [
     "The Desert Nomad lives in the Crimson chamber.",
     "The Palace Scholar lives in the Ivory chamber.",
-    "Oasis Water is served in the Crimson chamber.",
+    "The Guardian who had the Desert hawk will drink Mint Tea",
     "The Royal Guard lives in the Jade chamber.",
     "The Royal Guard keeps the Golden Camel.",
     "The Palace Scholar keeps the White Tiger.",
@@ -50,33 +50,36 @@ export default function Round3Page() {
       const newWrongs = wrongs + 1;
       setWrongs(newWrongs);
 
-      if (newWrongs >= 5) {
+      if (newWrongs >= 1) {
         setLocked(true);
         setResult("❌ Incorrect. The final wish is lost.");
+        setTimeout(() => {
+          navigate('/unqualified')
+        }, 700);
       } else {
         setResult("Incorrect. Try again.");
       }
     }
   };
 
-      useEffect(() => {
-        if (timeLeft > 0) {
-          const interval = setInterval(() => {
-            setTimeLeft((prev) => prev - 1);
-          }, 1000);
-    
-          return () => clearInterval(interval);
-        }
-        else {
-          navigate('/unqualified')
-          return
-        }
-    
-      }, [timeLeft, navigate]);
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+    else {
+      navigate('/unqualified')
+      return
+    }
+
+  }, [timeLeft, navigate]);
 
   return (
     <div className="relative min-h-screen text-white">
-      
+
       {/* Blurred Background */}
       <div
         className="absolute inset-0 bg-cover bg-center blur-[2px] scale-105"
@@ -130,7 +133,7 @@ export default function Round3Page() {
         {/* FINAL ANSWER */}
         <div className="mt-8 bg-white/10 p-6 rounded-2xl border border-yellow-500/30">
           <h2 className="text-xl font-semibold text-yellow-400 mb-4">
-            Final Answer (5 Attempts Only)
+            Final Answer (1 Attempt Only)
           </h2>
 
           <div className="flex flex-col md:flex-row gap-4">

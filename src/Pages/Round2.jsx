@@ -27,7 +27,7 @@ const puzzleBlocks = {
   "1-1": "flow", 
   "1-2": "sudoku",
   "2-0": "slider",
-  // "0-1": "bishops",
+  "0-1": "bishops",
   "0-2": "checkmate",
   "1-0": "tango",
   "2-1": "tiling",
@@ -35,7 +35,7 @@ const puzzleBlocks = {
 };
 
 export default function Round2() {
-  const [timeLeft, setTimeLeft] = useState(1800)
+  const [timeLeft, setTimeLeft] = useState(1320)
   const [playerPos, setPlayerPos] = useState({ row: 0, col: 0 });
   const [completedBlocks, setCompletedBlocks] = useState({});
   const [activePuzzle, setActivePuzzle] = useState(null);

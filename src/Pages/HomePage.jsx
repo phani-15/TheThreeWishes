@@ -122,11 +122,12 @@ const HomePage = () => {
       Rules & Instructions
     </h2>
 
-    <ul className="space-y-4 text-gray-300 text-lg sm:text-xl">
+    <ul className="space-y-4 text-gray-300 text-md sm:text-xl">
       <li>• Each round must be completed within the allotted time.</li>
       <li>• Team coordination is essential for success.</li>
       <li>• No external assistance is allowed.</li>
       <li>• Follow coordinator instructions at all times.</li>
+      <li>• Refreshing the browser makes you lose the game. Be aware of it!!</li>
     </ul>
   </div>
 </div>

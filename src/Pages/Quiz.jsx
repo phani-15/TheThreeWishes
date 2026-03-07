@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Level1Quiz = () => {
 
-  const [timeLeft, setTimeLeft] = useState(900)
+  const [timeLeft, setTimeLeft] = useState(600)
   const navigate = useNavigate()
 
   const questions = [
@@ -333,8 +333,11 @@ const Level1Quiz = () => {
                     🔄 Retry
                   </button>
                   <button
-                    onClick={() => navigate("/win1")}
-                    className="px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-lg cursor-pointer"
+                    onClick={() =>{
+                      if(score >= 80)
+                      navigate("/win1")
+                      }}
+                    className={`px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-lg ${score<80 ? "cursor-not-allowed" : "cursor-pointer"}`}
                   >
                     Next →
                   </button>

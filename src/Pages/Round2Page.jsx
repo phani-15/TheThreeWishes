@@ -53,9 +53,7 @@ export default function Round2Page() {
           "Each cell contains one puzzle.",
           "You must solve a puzzle to unlock and move to the next cell.", 
           "You can move only to adjacent cells:", 
-         //, 
           "Diagonal movement is NOT allowed.", 
-          "You cannot revisit a completed cell."
         ]}
       />
 

@@ -44,7 +44,7 @@ export default function Round1Page() {
         buttonNavigation = "/quiz"
         time = {level1Time}
         rules={[
-          "Solve logical challenges within the time limit",
+          "Solve logical questions within the time limit",
           "No external help is allowed",
           "Each question is worth 20 points",
           "You can retry but it costs 5 points deduction"

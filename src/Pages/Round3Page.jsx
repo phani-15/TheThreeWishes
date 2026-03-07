@@ -52,8 +52,9 @@ export default function Round3Page() {
         time={level3Time}
         rules={[
           "You will be given a passage of hints",
-          "Only one question with 5 chances to answer",
-          "First to finish is the winner"
+          "You have two questions to answer with 4 chances",
+          "First to finish is the winner",
+          "In case of tie or any issue in deciding winner, the first team who completed the level2 will be the winner"
         ]}
       />
 
